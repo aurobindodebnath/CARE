@@ -19,6 +19,7 @@ class ApplicationSecurity(models.Model):
 
     STATUS_CHOICES = (
         ('Not Assigned','Not Assigned'),
+        ('Rejected','Rejected'),
         ('In Progress','In Progress'),
         ('Completed','Completed'),
     )
@@ -39,6 +40,7 @@ class VAPTAssessment(models.Model):
 
     STATUS_CHOICES = (
         ('Not Assigned','Not Assigned'),
+        ('Rejected','Rejected'),
         ('In Progress','In Progress'),
         ('Completed','Completed'),
     )
@@ -68,6 +70,7 @@ class ConfigurationReview(models.Model):
 
     STATUS_CHOICES = (
         ('Not Assigned','Not Assigned'),
+        ('Rejected','Rejected'),
         ('In Progress','In Progress'),
         ('Completed','Completed'),
     )

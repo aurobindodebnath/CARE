@@ -26,4 +26,4 @@ class UserProfile(models.Model):
     organization = models.ForeignKey(Organization, related_name='user_organization', blank=True, null=True, on_delete=models.SET_NULL)
     department = models.ForeignKey(Department, related_name='user_designation', blank=True, null=True, on_delete=models.SET_NULL)
     def __str__(self):
-        return self.user.email
+        return self.user.username + self.user.email
