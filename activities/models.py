@@ -16,7 +16,6 @@ class Organization(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=120)
-    organization = models.ManyToManyField(Organization)
 
     def __str__(self):
         return self.name
