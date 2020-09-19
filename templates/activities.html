@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">All Activities</h1>
+</div>
+
+<ul class="nav nav-tabs">
+  <li class="active"><button class="btn btn-info" data-toggle="tab" href="#appsec">Application Security</button></li>
+  <li><button class="btn btn-info" data-toggle="tab" href="#vapt">Vulnerability Assessment</button></li>
+  <li><button class="btn btn-info" data-toggle="tab" href="#config">Configuration Review</button></li>
+</ul>
+
+<div class="tab-content">
+  <div id="appsec" class="tab-pane fade in active">
+    <br>
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Application Security Assessment</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>URL</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>URL</th>
+                <th>Status</th>
+              </tr>
+            </tfoot>
+            <tbody>
+              {% for x in appsec %}
+              <tr>
+                <td><a href="{% url 'appsec_detail' unique_id=x.id %}">APP{{ x.id }} </a></td>
+                <td>{{ x.name }}</td>
+                <td>{{ x.url }}</td>
+                {% if x.status == 'Not Assigned' %}
+                  <td style="background-color: rgb(89, 117, 163); color:white;">
+                {% elif x.status == 'Completed' %} 
+                  <td style="background-color: rgb(23, 233, 76); color:black;">   
+                {% elif x.status == 'Rejected' %}
+                  <td style="background-color: rgb(172, 33, 33); color:white;">
+                {% elif x.status == 'In Progress' %}
+                  <td style="background-color: rgb(215, 218, 39); color:black;">
+                {% endif %}
+                    {{ x.status }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+
+    
+  </div>
+  <div id="vapt" class="tab-pane fade">
+    <br>
+    <h4>Vulnerability Assessment</h4>
+    {% for x in vapt %}
+        {{ x.id }}
+        {{ x.name }}
+        {{ x.host_count }}
+        {{ x.status }}
+    {% endfor %}
+
+  </div>
+  <div id="config" class="tab-pane fade">
+    <br>
+    <h4>Configuration Review</h4>
+
+    
+    {% for x in config %}
+    
+        {{ x.id }}
+        {{ x.name }}
+        {{ x.device_type }}
+        {{ x.status }}
+    {% endfor %}
+
+  </div>
+</div>
+
+
+{% endblock %}
+ 

@@ -42,7 +42,7 @@ class ApplicationSecurity(models.Model):
     application_db_details = models.CharField(max_length=200)
     
     credentials = models.TextField()
-    other_details = models.TextField()
+    other_details = models.TextField(null=True, blank=True)
 
     STATUS_CHOICES = (
         ('Not Assigned','Not Assigned'),
@@ -54,7 +54,7 @@ class ApplicationSecurity(models.Model):
     assigned_by = models.ForeignKey(User, related_name='application_assigned_by', blank=True, null=True, on_delete=models.SET_NULL)
     assigned_to = models.ForeignKey(User, related_name='application_assigned_to',blank=True, null=True, on_delete=models.SET_NULL)
     date_posted = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=100, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0])
 
     def __str__(self):
         return self.name

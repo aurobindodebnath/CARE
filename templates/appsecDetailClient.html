@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Application Security Assessment - ID: APP{{ object.id }} </h1>
+</div>
+
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">{{object.name}}</h6>
+  </div>
+  <div class="card-body">
+    <table class="table table-striped">
+      <tr>
+        <td><b>URL</b></td><td>{{object.url}}</td>
+      </tr>
+      <tr>
+        <td><b>Functionality</b></td><td>{{object.functionality}}</td>
+      </tr>
+      <tr>
+        <td><b>Business Purpose</b></td><td>{{object.business_purpose}}</td>
+      </tr>
+      <tr>
+        <td><b>Number of Roles</b></td><td>{{object.roles}}</td>
+      </tr>
+      <tr>
+        <td><b>Number of Lines of Code</b></td><td>{{object.no_of_lines_of_code}}</td>
+      </tr>
+      <tr>
+        <td><b>Host Server</b></td><td>{{object.host_server}}</td>
+      </tr>
+      <tr>
+        <td><b>Technologies</b></td><td>{{object.technologies}}</td>
+      </tr>
+      <tr>
+        <td><b>Application DB Details</b></td><td>{{object.application_db_details}}</td>
+      </tr>
+      <tr>
+        <td><b>Credentials</b></td><td>{{object.credentials}}</td>
+      </tr>
+      <tr>
+        <td><b>Other Details</b></td><td>{{object.other_details}}</td>
+      </tr>
+      <tr>
+        <td><b>Assigned By</b></td><td>{{object.assigned_by}}</td>
+      </tr>
+      <tr>
+        <td><b>Status</b></td><td>{{object.status}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
+{% endblock %}
