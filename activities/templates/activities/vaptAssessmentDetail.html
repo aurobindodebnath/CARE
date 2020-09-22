@@ -107,8 +107,8 @@
 
 				<div style="margin-left:20px; margin-top:20px">
 					<h4>{{vapt_assessment_list.task.code}}</h4>
-					<p><strong>Assigned by:</strong>{{vapt_assessment_list.task.assigned_by.user.first_name}} {{vapt_assessment_list.task.assigned_by.user.last_name}}</p>
-					<p><strong>Assigned on:</strong>{{vapt_assessment_list.task.date_posted}}</p>
+					<p><strong>Assigned by:</strong> {{vapt_assessment_list.task.assigned_by.user.first_name}} {{vapt_assessment_list.task.assigned_by.user.last_name}}</p>
+					<p><strong>Assigned on:</strong> {{vapt_assessment_list.task.date_posted}}</p>
 
 					{% if perms.activities.change_task %}
 			<form action="{% url 'update_status_vapt' vapt_assessment_list.pk %}" method="POST">

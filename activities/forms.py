@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-from activities.models import UserProfile
+from activities.models import *
 
 class RequestApplicationSecurity(forms.Form):
 	task_code = forms.CharField(help_text="Enter unique application code for reference...")
