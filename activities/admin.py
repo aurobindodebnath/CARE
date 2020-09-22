@@ -1,13 +1,39 @@
 from django.contrib import admin
-from .models import * #ApplicationSecurity, VAPTAssessment, ConfigurationReview, Organization, Department, UserProfile, AppSecComments, VAPTComments, ConfigComments
+from .models import *
 
-admin.site.register(UserProfile)
-admin.site.register(Department)
-admin.site.register(Organization)
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+	pass
+	#fields
+	#list_display = ('User__first_name',)
+	#fieldsets
 
-admin.site.register(Task)
-admin.site.register(Comment)
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+	pass
 
-admin.site.register(ApplicationSecurity)
-admin.site.register(VAPTAssessment)
-admin.site.register(ConfigurationReview)
+@admin.register(Organization)
+class OrganizationAdmin(admin.ModelAdmin):
+	pass
+
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+	list_filter = ('status', )
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+	pass
+
+
+@admin.register(ApplicationSecurity)
+class ApplicationSecurityAdmin(admin.ModelAdmin):
+	pass
+
+@admin.register(VaptAssessment)
+class VaptAssessmentAdmin(admin.ModelAdmin):
+	pass
+
+@admin.register(ConfigurationReview)
+class ConfigurationReviewAdmin(admin.ModelAdmin):
+	pass
