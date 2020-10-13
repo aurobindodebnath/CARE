@@ -50,9 +50,19 @@
 
 		<!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="{% url 'application_security' %}">
+        <a class="nav-link" href="{% url 'application_security' %}" data-toggle="collapse" data-target="#app-cat">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>App Security Assessment</span></a>
+          <span>Penetration Testing</span></a>
+
+        <div id="app-cat" class="collapse">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <p><a class="collapse-item" href="{% url 'request_application_security' %}">Web Application (Internet)</a></p>
+            <p><a class="collapse-item" href="{% url 'request_vapt_assessment' %}">Web Service (Internet)</a></p>
+            <p><a class="collapse-item" href="{% url 'request_config_review' %}">Web Application (Intranet)</a></p>
+            <p><a class="collapse-item" href="{% url 'request_config_review' %}">Web Service (Intranet)</a></p>
+            <p><a class="collapse-item" href="{% url 'request_config_review' %}">Mobile Application</a></p>
+          </div>
+        </div>
       </li>
       <li class="nav-item active">
         <a class="nav-link" href="{% url 'vapt_assessment' %}">
@@ -62,7 +72,7 @@
       <li class="nav-item active">
         <a class="nav-link" href="{% url 'config_review' %}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Configuration Review</span></a>
+          <span>Configuration Audit</span></a>
       </li>
       
       <!-- Divider -->
@@ -74,9 +84,9 @@
         <div id="collapsePages" style="margin: 5px;">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 style="padding-top: 10px; color:#222;" class="collapse-header text-center">Request Activity</h6><hr>
-            <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'request_application_security' %}">Application Security Assessment</a></p>
+            <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'request_application_security' %}">Penetration Testing</a></p>
             <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'request_vapt_assessment' %}">Vulnerability Assessment</a></p>
-            <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'request_config_review' %}">Configuration Review</a></p>
+            <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'request_config_review' %}">Configuration Audit</a></p>
           </div>
         </div>
       </li>

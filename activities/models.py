@@ -7,6 +7,15 @@ from django.contrib.auth.models import User
 #TODO: check on_delete option
 #TODO: add help_text as per requirement
 
+ACCESSIBILITY_CHOICES = (
+	('internal', 'Internal'),
+	('external', 'External'),
+)
+ENVIRONMENT_CHOICES = (
+	('uat', 'UAT'),
+	('prod', 'Production'),
+)
+
 class Organization(models.Model):
 	name = models.CharField(max_length=120)
 
@@ -14,7 +23,11 @@ class Organization(models.Model):
 		return self.name
 
 class Department(models.Model):
-	name = models.CharField(max_length=120)
+	name = models.CharField(max_length=150)
+	full_name = models.CharField(max_length=240)
+	organization = models.ForeignKey(Organization, related_name='department_organization', on_delete=models.PROTECT)
+	location = models.CharField(max_length=120)
+	address = models.TextField()
 
 	def __str__(self):
 		return self.name
@@ -25,7 +38,7 @@ class UserProfile(models.Model):
 	employee_id = models.CharField(max_length=50)
 	contact = models.CharField(max_length=16)
 	department = models.ForeignKey(Department, related_name='user_designation', on_delete=models.PROTECT)
-	organization = models.ForeignKey(Organization, related_name='user_organization', on_delete=models.PROTECT)
+#	organization = models.ForeignKey(Organization, related_name='user_organization', on_delete=models.PROTECT)
 
 	def __str__(self):
 		return self.user.username
@@ -60,49 +73,60 @@ class Comment(models.Model):
 		return self.task.code
 
 class ApplicationSecurity(models.Model):
+	TESTING_CHOICES = (
+		('blackbox','Black Box'),
+		('greybox', 'Grey Box'),
+		('whitebox', 'White Box'),
+	)
+	DEVELOPMENT_CHOICES = (
+		('inhouse','In-House'),
+		('third_party', 'Third Party'),
+	)
 	task = models.ForeignKey(Task, on_delete=models.CASCADE)
 	name = models.CharField(max_length=300)
-	url = models.URLField(max_length=300)
-	functionality = models.TextField(max_length=500)
-	business_purpose = models.TextField(max_length=500)
-	role_count = models.CharField(max_length=200)
-	loc = models.CharField(max_length=200)
-	host_server = models.CharField(max_length=200)
-	frontend_technologies = models.CharField(max_length=500)
-	backend_technologies = models.CharField(max_length=500)  		#application db details
-
-	credentials = models.TextField()								#TODO: create seperate table for credentials
-	comments = models.TextField(null=True, blank=True, max_length=500)
+	owner = models.TextField(null=True)
+	spoc = models.TextField(null=True)
+	url = models.URLField(max_length=300, null=True)
+	role_count = models.CharField(max_length=200, null=True)
+	functionality = models.TextField(max_length=500, null=True)
+	testing_type = models.TextField(max_length=50, choices=TESTING_CHOICES, null=True)
+	accessibility = models.CharField(max_length=20, choices=ACCESSIBILITY_CHOICES, null=True)
+	development = models.CharField(max_length=20, choices=DEVELOPMENT_CHOICES, null=True)
+	environment = models.CharField(max_length=20, choices=ENVIRONMENT_CHOICES, null=True)
+	page_count = models.IntegerField(null=True)
+	loc = models.CharField(max_length=200, null=True)
+	files = models.FileField(upload_to='uploads/penetration_testing/', null=True, blank=True)
+	comments = models.TextField(null=True, blank=True)
 
 	def __str__(self):
 		return self.task.code
    
 class VaptAssessment(models.Model):
 	task = models.ForeignKey(Task, on_delete=models.CASCADE)
-	name = models.TextField()
-	ip_address = models.TextField()
-	device_type = models.TextField()
-	comments = models.TextField()
+	ip_address = models.TextField(null=True)
+	accessibility = models.CharField(max_length=20, choices=ACCESSIBILITY_CHOICES, null=True)
+	owner = models.TextField(null=True)
+	spoc = models.TextField(null=True)
+	device_type = models.TextField(null=True)
+	environment = models.CharField(max_length=20, choices=ENVIRONMENT_CHOICES, null=True)
+	location = models.TextField(null=True)
+	files = models.FileField(upload_to='uploads/vulnerability_assessment/', null=True, blank=True)
+	comments = models.TextField(null=True, blank=True)
 
 	def __str__(self):
 		return self.task.code
 
 
 class ConfigurationReview(models.Model):
-	DEVICE_CHOICES = (
-		('router','Router'),
-		('switches','Switches'),
-		('firewall','Firewall'),
-		('window_server','Windows Server'),
-		('linux_server','Linux Server'),
-		('database','Database'),
-		('other', 'Other'),
-	)
 	task = models.ForeignKey(Task, on_delete=models.CASCADE)
-	name = models.CharField(max_length=300)
-	device_type = models.CharField(max_length=16, choices=DEVICE_CHOICES)
-	host_count = models.IntegerField()
-	comments = models.TextField()
+	ip_address = models.TextField(null=True)
+	owner = models.TextField(null=True)
+	spoc = models.TextField(null=True)
+	device_type = models.TextField(null=True)
+	location = models.TextField(null=True)
+	host_count = models.IntegerField(null=True)
+	files = models.FileField(upload_to='uploads/configguration_review/', null=True, blank=True)
+	comments = models.TextField(null=True, blank=True)
 
 	def __str__(self):
 		return self.task.code

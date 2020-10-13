@@ -104,8 +104,12 @@ class VaptAssessmentListView(LoginRequiredMixin, generic.ListView):
 class ConfigurationReviewListView(LoginRequiredMixin, generic.ListView):
 	model = ConfigurationReview
 	context_object_name = 'config_review_list'
-	queryset = ConfigurationReview.objects.all()[:5]
+	ordering = ['-task__date_posted',]
+	queryset = ConfigurationReview.objects.all()
 	template_name = 'activities/configReview.html'
+	#TODO: use pagination
+	#TODO: use get_queryset for filtering
+	#paginate_by = 1
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
