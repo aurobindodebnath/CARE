@@ -22,8 +22,15 @@ class RequestApplicationSecurity(forms.Form):
 		('inhouse','In-House'),
 		('third_party', 'Third Party'),
 	)
-	#task_code = forms.CharField(help_text="Enter unique application code for reference...")
+	CATEGORY_CHOICES = (
+		('webappext','Web Application External'),
+		('webappint', 'Web Application Internal'),
+		('webserint', 'Web Service External'),
+		('webserint', 'Web Service Internal'),
+		('mobapp', 'Mobile Application'),
+	)
 	name = forms.CharField(label='Application Name', help_text="Enter the name of application...")
+	category = forms.ChoiceField(label='Category', choices=CATEGORY_CHOICES)
 	owner = forms.CharField(label='Application Owner', help_text='Enter owner name, email and contact no...')
 	spoc = forms.CharField(label='Division SPOC', help_text='Enter Division SPOC detail...')
 	url = forms.CharField(label='Application URL', help_text="Enter application's URL...")
@@ -50,21 +57,21 @@ class RequestVaptAssessment(forms.Form):
 	device_type = forms.CharField(help_text='Enter device type...')
 	environment = forms.ChoiceField(choices=ENVIRONMENT_CHOICES, help_text='Select testing environment...')
 	location = forms.CharField(help_text='Enter site location...')
-	files = forms.FileField(label='Upload')
+	files = forms.FileField(required=False, label='Upload')
 	comments = forms.CharField(required=False, widget=forms.Textarea, help_text="Add comments...")
 
 	#TODO: Sanatize input
 
 class RequestConfigReview(forms.Form):
 #	task = forms.text_field(Task, on_delete=models.CASCADE)
-	ip_address = forms.CharField(label='IP Address', help_text='Enter IP address/Host name...')
-	owner = forms.CharField(label='Asset/Device Owner', help_text="Enter asset/device owner's name and department...")
-	spoc = forms.CharField(label='Division SPOC', help_text='Enter Division SPOC name, email-id and contact no...')
-	device_type = forms.CharField(help_text='Enter device type/details. e.g Router, Switch, Server, Databases...')
-	location = forms.CharField(help_text='Enter site location...')
-	host_count = forms.IntegerField(label='No. of Hosts', help_text='Enter the no. of hosts...')
-	files = forms.FileField(label='Upload', help_text='Select file to be uploaded...')
-	comments = forms.CharField(required=False, help_text="Add comments...", widget=forms.Textarea)
+	ip_address = forms.CharField(label='IP Address', widget=forms.TextInput(attrs={'placeholder': 'IP Address/Hostname'}))
+	owner = forms.CharField(label='Asset/Device Owner', widget=forms.TextInput(attrs={'placeholder': 'Asset owner\'s name & department'}))
+	spoc = forms.CharField(label='Division SPOC', widget=forms.TextInput(attrs={'placeholder':'Division SPOC name, email-id & contact no'}))
+	device_type = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Eg Router, Switch, Server, Database'}))
+	location = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Site location, eg: MKHO, Mumbai'}))
+	host_count = forms.IntegerField(label='No. of Hosts')
+	files = forms.FileField(required=False, label='Upload')
+	comments = forms.CharField(required=False, widget=forms.Textarea(attrs={'placeholder':'Add any additional comments'}))
 	
 	#TODO: Sanatize input
 
@@ -76,4 +83,4 @@ class UpdateTask(forms.Form):
 		('rejected', 'Rejected'),
 	)
 	assigned_to = forms.ChoiceField(choices=[(up.id, str(up.user.first_name + " " + up.user.last_name)) for up in UserProfile.objects.filter(department__organization__name__exact="KPMG")])
-	status = forms.ChoiceField(choices=STATUS_CHOICE, help_text="Update the stauts of activity....")
+	status = forms.ChoiceField(choices=STATUS_CHOICE)

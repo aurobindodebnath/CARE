@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block body %}
-
+<style>  td {
+	word-break: break-all;
+  }</style>
 	<!-- Page Heading -->
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
 		<h1 class="h3 mb-0 text-gray-800">Configuration Review</h1>
@@ -102,28 +104,32 @@
 		<hr>
 		
 		{% if config_review_list %}
-		<table border=1 width="100%">
-			<tr>
-				<th><center>Device Name</center></th>
-				<th><center>Device Type</center></th>
-				<th><center>Department</center></th>
-				<th><center>Location</center></th>
-				<th><center>Assigned on</center></th>
-				<th><center>Status</center></th>
+		<table class="table table-striped" width="100%">
+			<thead>
+			<tr class="d-flex">
+				<th class="col-2">IP Address</th>
+				<th class="col-2">Device Type</th>
+				<th class="col-2">Department</th>
+				<th class="col-2">Location</th>
+				<th class="col-2">Assigned on</th>
+				<th class="col-2">Status</th>
 			</tr>
+			</thead>
+			<tbody>
 			{% for activity in config_review_list %}
-				<tr>
-					<td><a href="{% url 'config_review_detail' activity.pk %}">{{ activity.name }}</a></td>
-					<td>{{ activity.get_device_type_display }}</td>
-					<td>{{ activity.task.assigned_by.department.name }}</td>
-					<td>{{ activity.task.assigned_by.department.location }}</td>
-					<td>{{ activity.task.date_posted.date }}</td>
-					<td>{{ activity.task.get_status_display }}</td>
+				<tr class="d-flex">
+					<td class="col-2"><a href="{% url 'config_review_detail' activity.pk %}">{{ activity.ip_address }}</a></td>
+					<td class="col-2">{{ activity.device_type }}</td>
+					<td class="col-2">{{ activity.task.assigned_by.user_profile.department.name }}</td>
+					<td class="col-2">{{ activity.task.assigned_by.user_profile.department.location }}</td>
+					<td class="col-2">{{ activity.task.date_posted.date }}</td>
+					<td class="col-2">{{ activity.task.get_status_display }}</td>
 				</tr>
 			{% endfor %}
+		</tbody>
 		</table>
 		{% else %}
-			<p>There are no application security assessment activities.</p>
+			<p>There are no configuration assessment activities.</p>
 		{% endif %}
 	</div>
 

@@ -54,23 +54,23 @@ class Task(models.Model):
 		('completed','Completed'),
 	)
 
-	code = models.CharField(max_length=100)
-	assigned_by = models.ForeignKey(UserProfile, related_name='application_assigned_by', on_delete=models.PROTECT)
+	code = models.AutoField(primary_key=True)
+	assigned_by = models.ForeignKey(User, related_name='application_assigned_by', on_delete=models.PROTECT)
 	date_posted = models.DateTimeField(auto_now_add=True)
-	assigned_to = models.ForeignKey(UserProfile, related_name='application_assigned_to',null=True, blank=True, on_delete=models.PROTECT)
+	assigned_to = models.ForeignKey(User, related_name='application_assigned_to',null=True, blank=True, on_delete=models.PROTECT)
 	status = models.CharField(max_length=100, choices=STATUS_CHOICES, blank=True, default='not_assigned')
 
 	def __str__(self):
-		return self.code
+		return str(self.code)
 
 class Comment(models.Model):
 	task = models.ForeignKey(Task, null=True, on_delete=models.CASCADE)
-	user = models.ForeignKey(UserProfile, related_name='comment_user', null=True, blank=False, on_delete=models.SET_NULL)
+	user = models.ForeignKey(User, related_name='comment_user', null=True, blank=False, on_delete=models.SET_NULL)
 	date = models.DateTimeField(auto_now=True)
 	comment = models.TextField(max_length=500)
 
 	def __str__(self):
-		return self.task.code
+		return str(self.task.code)
 
 class ApplicationSecurity(models.Model):
 	TESTING_CHOICES = (
@@ -82,8 +82,16 @@ class ApplicationSecurity(models.Model):
 		('inhouse','In-House'),
 		('third_party', 'Third Party'),
 	)
+	CATEGORY_CHOICES = (
+		('webappext','Web Application External'),
+		('webappint', 'Web Application Internal'),
+		('webserint', 'Web Service External'),
+		('webserint', 'Web Service Internal'),
+		('mobapp', 'Mobile Application'),
+	)
 	task = models.ForeignKey(Task, on_delete=models.CASCADE)
 	name = models.CharField(max_length=300)
+	category = models.TextField(max_length=50, choices=CATEGORY_CHOICES, null=True)
 	owner = models.TextField(null=True)
 	spoc = models.TextField(null=True)
 	url = models.URLField(max_length=300, null=True)
@@ -99,7 +107,7 @@ class ApplicationSecurity(models.Model):
 	comments = models.TextField(null=True, blank=True)
 
 	def __str__(self):
-		return self.task.code
+		return str(self.task.code) + ' - ' + self.name
    
 class VaptAssessment(models.Model):
 	task = models.ForeignKey(Task, on_delete=models.CASCADE)
@@ -114,7 +122,7 @@ class VaptAssessment(models.Model):
 	comments = models.TextField(null=True, blank=True)
 
 	def __str__(self):
-		return self.task.code
+		return str(self.task.code) + ' - ' + self.ip_address
 
 
 class ConfigurationReview(models.Model):
@@ -125,8 +133,8 @@ class ConfigurationReview(models.Model):
 	device_type = models.TextField(null=True)
 	location = models.TextField(null=True)
 	host_count = models.IntegerField(null=True)
-	files = models.FileField(upload_to='uploads/configguration_review/', null=True, blank=True)
+	files = models.FileField(upload_to='uploads/configuration_review/', null=True, blank=True)
 	comments = models.TextField(null=True, blank=True)
 
 	def __str__(self):
-		return self.task.code
+		return str(self.task.code) + ' - ' + self.device_type

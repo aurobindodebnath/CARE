@@ -100,30 +100,87 @@
 			</div>
 		</div>
 		<hr>
-		<h1>{{config_review_list.name}}</h1>
-				<p><strong>Device Type:</strong> {{config_review_list.device_type}}</p>
-				<p><strong>Host Count:</strong> {{config_review_list.host_count}}</p>
-				<p><strong>Comments:</strong> {{config_review_list.comments}}</p>
 
-				<div style="margin-left:20px; margin-top:20px">
-					<h4>{{config_review_list.task.code}}</h4>
-					<p><strong>Assigned by:</strong> {{config_review_list.task.assigned_by.user.first_name}} {{config_review_list.task.assigned_by.user.last_name}}</p>
-					<p><strong>Assigned on:</strong> {{config_review_list.task.date_posted}}</p>
+		<div class="col-xl-12 col-md-12 mb-12">
+			<div class="card border-left-primary shadow h-100 py-2">
+			  <div class="card-body">
+				<div class="row no-gutters align-items-center">
+				  <div class="col mr-2">
+	
 
-			{% if perms.activities.change_task %}
-			<form action="{% url 'update_status_config' config_review_list.pk %}" method="POST">
-				{% csrf_token %}
-				<table>
-					{{form.as_table}}
+		<div class="container-fluid" style="background-color:#496fdb; color:white; padding:20px;border-radius: 5px;">
+			<h3><span style="background-color: white;color:blue;padding:3px;border-radius:4px;">{{config_review_list.task.code}}</span> &nbsp;&nbsp;&nbsp; IP Address: <span><b>{{config_review_list.ip_address}}</b></span></h3>
+		</div>
+		<div class="container-fluid" style="border-bottom:1px solid grey">
+			<table class="table table-condensed">
+				<tr>
+					<td><strong>Device Type:</strong></td>
+					<td>{{config_review_list.device_type}}</td>
+				</tr>
+				<tr>
+					<td><strong>Owner:</strong></td>
+					<td>{{config_review_list.owner}}</td>
+				</tr>
+				<tr>
+					<td><strong>Spoc:</strong></td>
+					<td>{{config_review_list.spoc}}</td>
+				</tr>
+				<tr>
+					<td><strong>Location:</strong></td>
+					<td>{{config_review_list.location}}</td>
+				</tr>
+
+				<tr>
+					<td><strong>Host Count:</strong></td>
+					<td>{{config_review_list.host_count}}</td>
+				</tr>
+				<tr>
+					<td><strong>Comments:</strong></td>
+					<td>{{config_review_list.comments}}</td>
+				</tr>
+			</table>
+		</div>
+		<div class="container-fluid">
+			<div class="container-fluid" style="background-color:#b5d9e6;color:#555555;">
+				<br>
+				<table class="table table-condensed" style="background-color:#d7e9f0;color:#555555;">
+					<tr>
+						<td><strong>Assigned by: </strong></td>
+						<td>{{config_review_list.task.assigned_by.username}}</td>
+					</tr>
+					<tr>
+						<td><strong>Assigned on: </strong></td>
+						<td>{{config_review_list.task.date_posted}}</td>
+					</tr>
+					{% if perms.activities.change_task %}
+						<form action="{% url 'update_status_application' application_security.pk %}" method="POST">
+							{% csrf_token %}
+								{{form.as_table}}
+								<tr>
+									<td><input class="btn btn-primary" type=submit value=Submit>
+									</td>
+								</tr>
+						</form>
+						{% else %}
+						<tr>
+							<td><strong>Assigned to:</strong></td>
+							<td>{{config_review_list.task.assigned_to.username}}</td>
+						</tr>
+						<tr>
+							<td><strong>Status:</strong></td>
+							<td>{{config_review_list.task.get_status_display}}</td>
+						</tr>
+					{% endif %}
+
 				</table>
-				<input type=submit value=Submit>
-			</form>
-			{% else %}
-			<p><strong>Assigned to:</strong> {{config_review_list.task.assigned_to.user.first_name}} {{config_review_list.task.assigned_to.user.last_name}}</p>
-			<p><strong>Status:</strong> {{config_review_list.task.get_status_display}}</p>
-			{% endif %}
+				<br>
+			</div>
+			</div>
 				</div>
-
+			</div>
+			</div>
+			</div>
+			</div>
 		
 	</div>
 

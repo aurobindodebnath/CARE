@@ -4,7 +4,7 @@
 
 	<!-- Page Heading -->
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
-		<h1 class="h3 mb-0 text-gray-800">Application Security Assessment</h1>
+		<h1 class="h3 mb-0 text-gray-800">{{ title }}</h1>
 	</div>
 	
 	<hr>
@@ -103,11 +103,31 @@
 		
 		{% if application_security_list %}
 		<ul>
-			{% for activity in application_security_list %}
-				<li>
-					<a href="{% url 'application_security_detail' activity.pk %}">{{ activity.name }}</a> ({{activity.url}})
-				</li>
-			{% endfor %}
+			<table class="table table-striped" width="100%">
+				<thead>
+				<tr class="d-flex">
+					<th class="col-2">IP Address</th>
+					<th class="col-2">Device Type</th>
+					<th class="col-2">Department</th>
+					<th class="col-2">Location</th>
+					<th class="col-2">Assigned on</th>
+					<th class="col-2">Status</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for activity in application_security_list %}
+					<tr class="d-flex">
+						<td class="col-2"><a href="{% url 'application_security_detail' activity.pk %}">{{ activity.name }}</a></td>
+						<td class="col-2">{{ activity.url }}</td>
+						<td class="col-2">{{ activity.task.assigned_by.user_profile.department.name }}</td>
+						<td class="col-2">{{ activity.task.assigned_by.user_profile.department.location }}</td>
+						<td class="col-2">{{ activity.task.date_posted.date }}</td>
+						<td class="col-2">{{ activity.task.get_status_display }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+			</table>
+
 		</ul>
 		{% else %}
 			<p>There are no application security assessment activities.</p>

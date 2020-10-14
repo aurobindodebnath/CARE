@@ -101,36 +101,122 @@
 		</div>
 		<hr>
 		
-		<h1>{{application_security.name}}</h1>
-		<p><strong>URL:</strong> <a href="{{application_security.url}}">{{application_security.url}}</a></p>
-		<p><strong>Functionlity:</strong> {{application_security.functionality}}</p>
-		<p><strong>Business Purpose:</strong> {{application_security.business_purpose}}</p>
-		<p><strong>No. of Roles:</strong> {{application_security.role_count}}</p>
-		<p><strong>Lines of code:</strong> {{application_security.loc}}</p>
-		<p><strong>Host Server:</strong> {{application_security.host_server}}</p>
-		<p><strong>Technologies:</strong> {{application_security.frontend_technologies}}</p>
-		<p><strong>Database Detail:</strong> {{application_security.backend_technologies}}</p>
-		<p><strong>Credentails:</strong> {{application_security.credentials}}</p>
-		<p><strong>Comments:</strong> {{application_security.comments}}</p>
 
-		<div style="margin-left:20px; margin-top:20px">
-			<h4>{{application_security.task.code}}</h4>
-			<p><strong>Assigned by:</strong> {{application_security.task.assigned_by.user.first_name}} {{application_security.task.assigned_by.user.last_name}}</p>
-			<p><strong>Assigned on:</strong> {{application_security.task.date_posted}}</p>
-			
-			{% if perms.activities.change_task %}
-			<form action="{% url 'update_status_application' application_security.pk %}" method="POST">
-				{% csrf_token %}
-				<table>
-					{{form.as_table}}
-				</table>
-				<input type=submit value=Submit>
-			</form>
-			{% else %}
-			<p><strong>Assigned to:</strong> {{application_security.task.assigned_to.user.first_name}} {{application_security.task.assigned_to.user.last_name}}</p>
-			<p><strong>Status:</strong> {{application_security.task.get_status_display}}</p>
-			{% endif %}
+		<div class="col-xl-12 col-md-12 mb-12">
+			<div class="card border-left-primary shadow h-100 py-2">
+			  <div class="card-body">
+				<div class="row no-gutters align-items-center">
+				  <div class="col mr-2">
+	
+
+		<div class="container-fluid" style="background-color:#496fdb; color:white; padding:20px;border-radius: 5px;">
+			<h3><span style="background-color: white;color:blue;padding:3px;border-radius:4px;">{{application_security.task.code}}</span> &nbsp;&nbsp;&nbsp; Application Name: <span><b>{{application_security.name}}</b></span></h3>
 		</div>
+		<div class="container-fluid" style="border-bottom:1px solid grey">
+			<table class="table table-condensed">
+				<tr>
+					<td><strong>URL:</strong></td>
+					<td>{{application_security.url}}</td>
+				</tr>
+				<tr>
+					<td><strong>Category:</strong></td>
+					<td>{{application_security.category}}</td>
+				</tr>
+				<tr>
+					<td><strong>Owner:</strong></td>
+					<td>{{application_security.owner}}</td>
+				</tr>
+				<tr>
+					<td><strong>Spoc:</strong></td>
+					<td>{{application_security.spoc}}</td>
+				</tr>
+
+				<tr>
+					<td><strong>Functionlity:</strong></td>
+					<td>{{application_security.functionality}}</td>
+				</tr>
+
+				<tr>
+					<td><strong>No. of Roles:</strong></td>
+					<td>{{application_security.role_count}}</td>
+				</tr>
+
+				<tr>
+					<td><strong>Lines of code:</strong></td>
+					<td>{{application_security.loc}}</td>
+				</tr>
+
+				<tr>
+					<td><strong>Testing Type:</strong></td>
+					<td>{{application_security.testing_type}}</td>
+				</tr>
+				<tr>
+					<td><strong>Accessibility:</strong></td>
+					<td>{{application_security.accessibility}}</td>
+				</tr>
+				<tr>
+					<td><strong>Development:</strong></td>
+					<td>{{application_security.development}}</td>
+				</tr>
+				<tr>
+					<td><strong>Environment:</strong></td>
+					<td>{{application_security.environment}}</td>
+				</tr>
+				<tr>
+					<td><strong>Page Count:</strong></td>
+					<td>{{application_security.page_count}}</td>
+				</tr>
+				<tr>
+					<td><strong>Comments:</strong></td>
+					<td>{{application_security.comments}}</td>
+				</tr>
+
+
+
+			</table>
+		</div>
+		<div class="container-fluid">
+			<div class="container-fluid" style="background-color:#b5d9e6;color:#555555;">
+				<br>
+				<table class="table table-condensed" style="background-color:#d7e9f0;color:#555555;">
+					<tr>
+						<td><strong>Assigned by: </strong></td>
+						<td>{{application_security.task.assigned_by.username}}</td>
+					</tr>
+					<tr>
+						<td><strong>Assigned on: </strong></td>
+						<td>{{application_security.task.date_posted}}</td>
+					</tr>
+					{% if perms.activities.change_task %}
+						<form action="{% url 'update_status_application' application_security.pk %}" method="POST">
+							{% csrf_token %}
+								{{form.as_table}}
+								<tr>
+									<td><input class="btn btn-primary" type=submit value=Submit>
+									</td>
+								</tr>
+						</form>
+						{% else %}
+						<tr>
+							<td><strong>Assigned to:</strong></td>
+							<td>{{application_security.task.assigned_to.username}}</td>
+						</tr>
+						<tr>
+							<td><strong>Status:</strong></td>
+							<td>{{application_security.task.get_status_display}}</td>
+						</tr>
+					{% endif %}
+
+				</table>
+				<br>
+			</div>
+		</div>
+				</div>
+			</div>
+			</div>
+			</div>
+			</div>
+
 
 	</div>
 

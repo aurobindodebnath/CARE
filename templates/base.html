@@ -56,11 +56,11 @@
 
         <div id="app-cat" class="collapse">
           <div class="bg-white py-2 collapse-inner rounded">
-            <p><a class="collapse-item" href="{% url 'request_application_security' %}">Web Application (Internet)</a></p>
-            <p><a class="collapse-item" href="{% url 'request_vapt_assessment' %}">Web Service (Internet)</a></p>
-            <p><a class="collapse-item" href="{% url 'request_config_review' %}">Web Application (Intranet)</a></p>
-            <p><a class="collapse-item" href="{% url 'request_config_review' %}">Web Service (Intranet)</a></p>
-            <p><a class="collapse-item" href="{% url 'request_config_review' %}">Mobile Application</a></p>
+            <p><a class="collapse-item" href="{% url 'webappexternal' %}">Web Application (External)</a></p>
+            <p><a class="collapse-item" href="{% url 'webappinternal' %}">Web Application (Internal)</a></p>
+            <p><a class="collapse-item" href="{% url 'webservexternal' %}">Web Service (External)</a></p>
+            <p><a class="collapse-item" href="{% url 'webservinternal' %}">Web Service (Internal)</a></p>
+            <p><a class="collapse-item" href="{% url 'mobapp' %}">Mobile Application</a></p>
           </div>
         </div>
       </li>
@@ -123,14 +123,14 @@
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="">
+               <!-- <a class="dropdown-item" href="">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
                 </a>
                 <a class="dropdown-item" href="">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Change Password
-                </a>
+                </a>-->
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href=# data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -152,9 +152,9 @@
       <!-- End of Main Content -->
       <br>
       <!-- Footer -->
-      <footer class="sticky-footer bg-white">
+      <footer class="sticky-footer" style="background-color: #5370c1;">
         <div class="container my-auto">
-          <div class="copyright text-center my-auto">
+          <div class="copyright text-center my-auto" style="color:white;">
             <span>Copyright &copy; KPMG 2020</span>
           </div>
         </div>

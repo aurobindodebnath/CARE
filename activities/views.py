@@ -27,13 +27,11 @@ def index(request):
 	vapt_rejected = VaptAssessment.objects.filter(task__status__exact='rejected').count()
 	vapt_completed = VaptAssessment.objects.filter(task__status__exact='completed').count()
 
-
 	config_total = ConfigurationReview.objects.all().count()
 	config_not_assigned = ConfigurationReview.objects.filter(task__status__exact='not_assigned').count()
 	config_in_progress = ConfigurationReview.objects.filter(task__status__exact='in_progress').count()
 	config_rejected = ConfigurationReview.objects.filter(task__status__exact='rejected').count()
 	config_completed = ConfigurationReview.objects.filter(task__status__exact='completed').count()
-
 
 	context = {
 		'total' : total,
@@ -86,6 +84,87 @@ class ApplicationSecurityListView(LoginRequiredMixin, generic.ListView):
 		context['completed'] = ApplicationSecurity.objects.filter(task__status__exact="completed").count()
 		return context
 
+class WebAppIntListView(LoginRequiredMixin, generic.ListView):
+	model = ApplicationSecurity
+	context_object_name = 'application_security_list'
+	queryset = ApplicationSecurity.objects.filter(category="webappint")
+	template_name = 'activities/applicationSecurity.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['total'] = ApplicationSecurity.objects.filter(category="webappint").count()
+		context['not_assigned'] = ApplicationSecurity.objects.filter(category="webappint", task__status__exact="not_assigned").count()
+		context['in_progress'] = ApplicationSecurity.objects.filter(category="webappint", task__status__exact="in_progress").count()
+		context['rejected'] = ApplicationSecurity.objects.filter(category="webappint", task__status__exact="rejected").count()
+		context['completed'] = ApplicationSecurity.objects.filter(category="webappint", task__status__exact="completed").count()
+		context['title'] = "Web Application (Internal)"
+		return context
+
+class WebAppExtListView(LoginRequiredMixin, generic.ListView):
+	model = ApplicationSecurity
+	context_object_name = 'application_security_list'
+	queryset = ApplicationSecurity.objects.filter(category="webappext")
+	template_name = 'activities/applicationSecurity.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['total'] = ApplicationSecurity.objects.filter(category="webappext").count()
+		context['not_assigned'] = ApplicationSecurity.objects.filter(category="webappext", task__status__exact="not_assigned").count()
+		context['in_progress'] = ApplicationSecurity.objects.filter(category="webappext", task__status__exact="in_progress").count()
+		context['rejected'] = ApplicationSecurity.objects.filter(category="webappext", task__status__exact="rejected").count()
+		context['completed'] = ApplicationSecurity.objects.filter(category="webappext", task__status__exact="completed").count()
+		context['title'] = "Web Application (External)"
+		return context
+
+class WebServIntListView(LoginRequiredMixin, generic.ListView):
+	model = ApplicationSecurity
+	context_object_name = 'application_security_list'
+	queryset = ApplicationSecurity.objects.filter(category="webserint")
+	template_name = 'activities/applicationSecurity.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['total'] = ApplicationSecurity.objects.filter(category="webserint").count()
+		context['not_assigned'] = ApplicationSecurity.objects.filter(category="webserint", task__status__exact="not_assigned").count()
+		context['in_progress'] = ApplicationSecurity.objects.filter(category="webserint", task__status__exact="in_progress").count()
+		context['rejected'] = ApplicationSecurity.objects.filter(category="webserint", task__status__exact="rejected").count()
+		context['completed'] = ApplicationSecurity.objects.filter(category="webserint", task__status__exact="completed").count()
+		context['title'] = "Web Service (Internal)"
+		return context
+
+class WebServExtListView(LoginRequiredMixin, generic.ListView):
+	model = ApplicationSecurity
+	context_object_name = 'application_security_list'
+	queryset = ApplicationSecurity.objects.filter(category="webserext")
+	template_name = 'activities/applicationSecurity.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['total'] = ApplicationSecurity.objects.filter(category="webserext").count()
+		context['not_assigned'] = ApplicationSecurity.objects.filter(category="webserext", task__status__exact="not_assigned").count()
+		context['in_progress'] = ApplicationSecurity.objects.filter(category="webserext", task__status__exact="in_progress").count()
+		context['rejected'] = ApplicationSecurity.objects.filter(category="webserext", task__status__exact="rejected").count()
+		context['completed'] = ApplicationSecurity.objects.filter(category="webserext", task__status__exact="completed").count()
+		context['title'] = "Web Service (External)"
+		return context
+
+class MobAppListView(LoginRequiredMixin, generic.ListView):
+	model = ApplicationSecurity
+	context_object_name = 'application_security_list'
+	queryset = ApplicationSecurity.objects.filter(category="mobapp")
+	template_name = 'activities/applicationSecurity.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['total'] = ApplicationSecurity.objects.filter(category="mobapp").count()
+		context['not_assigned'] = ApplicationSecurity.objects.filter(category="mobapp", task__status__exact="not_assigned").count()
+		context['in_progress'] = ApplicationSecurity.objects.filter(category="mobapp", task__status__exact="in_progress").count()
+		context['rejected'] = ApplicationSecurity.objects.filter(category="mobapp", task__status__exact="rejected").count()
+		context['completed'] = ApplicationSecurity.objects.filter(category="mobapp", task__status__exact="completed").count()
+		context['title'] = "Mobile Application"
+		return context
+
+
 class VaptAssessmentListView(LoginRequiredMixin, generic.ListView):
 	model = VaptAssessment
 	context_object_name = 'vapt_assessment_list'
@@ -118,6 +197,7 @@ class ConfigurationReviewListView(LoginRequiredMixin, generic.ListView):
 		context['in_progress'] = ConfigurationReview.objects.filter(task__status__exact="in_progress").count()
 		context['rejected'] = ConfigurationReview.objects.filter(task__status__exact="rejected").count()
 		context['completed'] = ConfigurationReview.objects.filter(task__status__exact="completed").count()
+		print(context)
 		return context
 
 class ApplicationSecurityDetailView(LoginRequiredMixin, generic.DetailView):
@@ -135,6 +215,7 @@ class ApplicationSecurityDetailView(LoginRequiredMixin, generic.DetailView):
 		context['rejected'] = ApplicationSecurity.objects.filter(task__status__exact="rejected").count()
 		context['completed'] = ApplicationSecurity.objects.filter(task__status__exact="completed").count()
 		return context
+
 
 class VaptAssessmentDetailView(LoginRequiredMixin, generic.DetailView):
 	model = VaptAssessment
@@ -175,25 +256,28 @@ def requestApplicationSecurity(request):
 
 		if form.is_valid():
 			task = Task(
-				code=form.cleaned_data['task_code'],
-				assigned_by = get_object_or_404(User, pk=request.user.pk).user_profile,
+				assigned_by = get_object_or_404(User, pk=request.user.pk)
 			)
-			task.save()
+			print(form.cleaned_data['category'])
+
 			new_application = ApplicationSecurity(
 				task=task,
 				name=form.cleaned_data['name'],
+				category=form.cleaned_data['category'],
+				owner=form.cleaned_data['owner'],
+				spoc=form.cleaned_data['spoc'],
 				url=form.cleaned_data['url'],
+				testing_type = form.cleaned_data['testing_type'],
+				accessibility = form.cleaned_data['accessibility'],
+				development = form.cleaned_data['development'],
+				environment = form.cleaned_data['environment'],
 				functionality=form.cleaned_data['functionality'],
-				business_purpose=form.cleaned_data['business_purpose'],
+				page_count = form.cleaned_data['page_count'],
 				role_count=form.cleaned_data['role_count'],
 				loc=form.cleaned_data['loc'],
-				host_server=form.cleaned_data['host_server'],
-				frontend_technologies=form.cleaned_data['frontend_technologies'],
-				backend_technologies=form.cleaned_data['backend_technologies'],
-				credentials=form.cleaned_data['credentials'],
 				comments=form.cleaned_data['comments'],
 			)
-
+			task.save()
 			new_application.save()
 			return HttpResponseRedirect(reverse('index'))
 
@@ -203,7 +287,6 @@ def requestApplicationSecurity(request):
 	context = {
 		'form':  form,
 	}
-
 	return render(request, 'activities/request_application_security.html', context)
 
 @login_required
@@ -213,18 +296,20 @@ def requestVaptAssessment(request):
 
 		if form.is_valid():
 			task = Task(
-				code=form.cleaned_data['task_code'],
-				assigned_by = get_object_or_404(User, pk=request.user.pk).user_profile,
+				assigned_by = get_object_or_404(User, pk=request.user.pk),
 			)
-			task.save()
 			new_application = VaptAssessment(
 				task=task,
-				name=form.cleaned_data['name'],
-				ip_address=form.cleaned_data['ip'],
+				ip_address=form.cleaned_data['ip_address'],
+				accessibility=form.cleaned_data['accessibility'],
+				owner=form.cleaned_data['owner'],
+				spoc=form.cleaned_data['spoc'],
 				device_type=form.cleaned_data['device_type'],
+				environment = form.cleaned_data['environment'],
+				location = form.cleaned_data['files'],
 				comments=form.cleaned_data['comments'],
 			)
-
+			task.save()
 			new_application.save()
 			return HttpResponseRedirect(reverse('index'))
 
@@ -234,7 +319,6 @@ def requestVaptAssessment(request):
 	context = {
 		'form':  form,
 	}
-
 	return render(request, 'activities/request_vapt_assessment.html', context)
 
 @login_required
@@ -244,15 +328,17 @@ def requestConfigReview(request):
 
 		if form.is_valid():
 			task = Task(
-				code=form.cleaned_data['task_code'],
-				assigned_by = get_object_or_404(User, pk=request.user.pk).user_profile,
+				assigned_by = get_object_or_404(User, pk=request.user.pk),
 			)
 			task.save()
 			new_application = ConfigurationReview(
 				task=task,
-				name=form.cleaned_data['name'],
 				device_type=form.cleaned_data['device_type'],
+				ip_address = form.cleaned_data['ip_address'],
+				owner = form.cleaned_data['owner'],
+				spoc = form.cleaned_data['spoc'],
 				host_count=form.cleaned_data['host_count'],
+				location = form.cleaned_data['location'],
 				comments=form.cleaned_data['comments'],
 			)
 
@@ -268,6 +354,8 @@ def requestConfigReview(request):
 
 	return render(request, 'activities/request_config_review.html', context)
 
+########################################################################
+
 def updateTaskApplication(request, pk):
 	task = get_object_or_404(ApplicationSecurity, pk=pk).task
 	if request.method == 'POST':
@@ -275,7 +363,7 @@ def updateTaskApplication(request, pk):
 
 		if form.is_valid():
 			task.status = form.cleaned_data['status']
-			task.assigned_to = get_object_or_404(UserProfile, pk=form.cleaned_data['assigned_to'])
+			task.assigned_to = get_object_or_404(User, pk=form.cleaned_data['assigned_to'])
 			task.save()
 
 		return HttpResponseRedirect(reverse('application_security_detail', kwargs={'pk':pk }))
@@ -297,7 +385,7 @@ def updateTaskVapt(request, pk):
 
 		if form.is_valid():
 			task.status = form.cleaned_data['status']
-			task.assigned_to = get_object_or_404(UserProfile, pk=form.cleaned_data['assigned_to'])
+			task.assigned_to = get_object_or_404(User, pk=form.cleaned_data['assigned_to'])
 			task.save()
 
 		return HttpResponseRedirect(reverse('vapt_assessment_detail', kwargs={'pk':pk }))
@@ -318,7 +406,7 @@ def updateTaskConfig(request, pk):
 
 		if form.is_valid():
 			task.status = form.cleaned_data['status']
-			task.assigned_to = get_object_or_404(UserProfile, pk=form.cleaned_data['assigned_to'])
+			task.assigned_to = get_object_or_404(User, pk=form.cleaned_data['assigned_to'])
 			task.save()
 
 		return HttpResponseRedirect(reverse('config_review_detail', kwargs={'pk':pk }))
