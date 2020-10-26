@@ -18,6 +18,13 @@
   <!-- Custom styles for this template-->
   <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
 
+  <style>
+  		.dropdown:hover .dropdown-menu{
+			display: block;
+			margin: 0px 0px 0px 20px;
+		}
+  </style>
+
 </head>
 
 <body id="page-top">
@@ -50,12 +57,14 @@
 
 		<!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="{% url 'application_security' %}" data-toggle="collapse" data-target="#app-cat">
+	  <div class='dropdown'>
+        <a class="nav-link dropdown-toggle" href="{% url 'application_security' %}" data-hover="dropdown">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Penetration Testing</span></a>
+          <span class='caret'>Penetration Testing</span>
+		 </a>
 
-        <div id="app-cat" class="collapse">
-          <div class="bg-white py-2 collapse-inner rounded">
+        <div class="dropdown-menu mr-1">
+          <div class="bg-white ml-3 collapse-inner rounded">
             <p><a class="collapse-item" href="{% url 'webappexternal' %}">Web Application (External)</a></p>
             <p><a class="collapse-item" href="{% url 'webappinternal' %}">Web Application (Internal)</a></p>
             <p><a class="collapse-item" href="{% url 'webservexternal' %}">Web Service (External)</a></p>
@@ -63,6 +72,7 @@
             <p><a class="collapse-item" href="{% url 'mobapp' %}">Mobile Application</a></p>
           </div>
         </div>
+		</div>
       </li>
       <li class="nav-item active">
         <a class="nav-link" href="{% url 'vapt_assessment' %}">
@@ -104,7 +114,8 @@
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                  <div class="text-center" style="width:100%">
-                    <h1 class="h4 text-gray-900">KPMG CARE</h1>
+                    <h1 class="h4 text-gray-900 mb-0">KPMG-IOCL</h1>
+                    <h1 class="h4 text-gray-700">Vulnerability Program Management Portal</h1>
                   </div>
           <!-- Sidebar Toggle (Topbar) -->
           <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">

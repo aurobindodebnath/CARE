@@ -5,15 +5,14 @@ urlpatterns = [
 	path('', views.index, name='index'),
 
 	path('application_security/', views.ApplicationSecurityListView.as_view(), name='application_security'),
-
-	path('webappinternal/', views.WebAppIntListView.as_view(), name='webappinternal'),
-	path('webservinternal/', views.WebServIntListView.as_view(), name='webservinternal'),
-	path('webappexternal/', views.WebAppExtListView.as_view(), name='webappexternal'),
-	path('webservexternal/', views.WebServExtListView.as_view(), name='webservexternal'),
-	path('mobapp/', views.MobAppListView.as_view(), name='mobapp'),
-
 	path('vapt_assessment/', views.VaptAssessmentListView.as_view(), name='vapt_assessment'),
 	path('config_review/', views.ConfigurationReviewListView.as_view(), name='config_review'),
+
+	path('application_security/web_app/internal/', views.WebAppIntListView.as_view(), name='webappinternal'),
+	path('application_security/web_app/external/', views.WebServIntListView.as_view(), name='webservinternal'),
+	path('application_security/web_service/internal/', views.WebAppExtListView.as_view(), name='webappexternal'),
+	path('application_security/web_service/external/', views.WebServExtListView.as_view(), name='webservexternal'),
+	path('application_security/mobile_app/', views.MobAppListView.as_view(), name='mobapp'),
 
 	path('application_security/<int:pk>/', views.ApplicationSecurityDetailView.as_view(), name='application_security_detail'),
 	path('vapt_assessment/<int:pk>/', views.VaptAssessmentDetailView.as_view(), name='vapt_assessment_detail'),

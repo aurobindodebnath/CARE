@@ -2,37 +2,35 @@
 
 {% block body %}
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
-		<h1 class="h3 mb-0 text-gray-800">Request Penetration Testing</h1>
+		<h1 class="h3 mb-0 text-gray-800">Initial Data Request - Application/Penetration Testing</h1>
 	</div>
 	<hr>
 	
 	<div class="col-xl-12 col-md-12 mb-12">
 		<div class="card border-left-primary shadow h-100 py-2">
-		  <div class="card-body">
-			<div class="row no-gutters align-items-center">
-			  <div class="col mr-2">
-
-		<form action="" method="post">
-			{% csrf_token %}
-			<table class="table table-condensed borderless">
-			{{ form.as_table }}
-			</table>
-			<input class="btn btn-primary btn-block" type="submit" value="Submit">
-		</form>
-
-		<style>
-			input {
-				width: 400px;
-			}
-
-			.borderless td, .borderless th {
-				border:none;
-			}
-		</style>
+			<div class="card-body">
+				<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<form action="" method="post">
+							{% csrf_token %}
+							<table class="table table-condensed borderless">
+								{{ form.as_table }}
+							</table>
+							<input class="btn btn-primary btn-block" type="submit" value="Submit">
+						</form>
+					</div>
+				</div>
+  			</div>
 		</div>
 	</div>
-  </div>
-</div>
-</div>
+	<style>
+		input {
+			width: 400px;
+		}
+
+		.borderless td, .borderless th {
+			border:none;
+		}
+	</style>
 
 {% endblock %}

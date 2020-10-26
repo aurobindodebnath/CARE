@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
   {% load static %}
-  <title>CARE</title>
+  <title>KPMG-IOCL</title>
 
   <!-- Custom fonts for this template-->
   <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -20,7 +20,9 @@
 
 </head>
 
-<body class="bg-gradient-primary">
+<!-- <body class="bg-gradient-primary" background="{% static 'img/IOCL.jpg' %}"> -->
+<!-- <body background="{% static 'img/IOCL.jpg' %}"> -->
+<body style="background-image: url('{% static 'img/bg.jpg' %}'); background-size: cover; background-position: 0% -350px"> 
 
   <div class="container">
 
@@ -36,7 +38,8 @@
               <div class="col-lg-12">
                 <div class="p-5">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">KPMG CARE</h1>
+                    <h1 class="h4 text-gray-900 mb-0">KPMG-IOCL</h1>
+					<h1 class="h4 text-gray-700 mb-4">Vulnerability Program Management Portal</h1>
                   </div>
                   <form class="user" action="{% url 'login' %}" method="post">
                     {% csrf_token %}

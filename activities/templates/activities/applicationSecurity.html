@@ -102,37 +102,65 @@
 		<hr>
 		
 		{% if application_security_list %}
-		<ul>
-			<table class="table table-striped" width="100%">
+			<table class='table table-striped' width="100%">
 				<thead>
-				<tr class="d-flex">
-					<th class="col-2">IP Address</th>
-					<th class="col-2">Device Type</th>
-					<th class="col-2">Department</th>
-					<th class="col-2">Location</th>
-					<th class="col-2">Assigned on</th>
-					<th class="col-2">Status</th>
-				</tr>
-				</thead>
-				<tbody>
-				{% for activity in application_security_list %}
-					<tr class="d-flex">
-						<td class="col-2"><a href="{% url 'application_security_detail' activity.pk %}">{{ activity.name }}</a></td>
-						<td class="col-2">{{ activity.url }}</td>
-						<td class="col-2">{{ activity.task.assigned_by.user_profile.department.name }}</td>
-						<td class="col-2">{{ activity.task.assigned_by.user_profile.department.location }}</td>
-						<td class="col-2">{{ activity.task.date_posted.date }}</td>
-						<td class="col-2">{{ activity.task.get_status_display }}</td>
+					<tr class='d-flex'>
+						<th class='col-2'>Application Name</th>
+						<th class='col-2'>Application URL</th>
+						<th class='col-2'>Department</th>
+						<th class='col-2'>Location</th>
+						<th class='col-2'>Assigned on</th>
+						<th class='col-2'>Status</th>
 					</tr>
-				{% endfor %}
-			</tbody>
+				<thead>
+				<tbody>
+					{% for activity in application_security_list %}
+						<tr class="d-flex">
+							<td class="col-2"><a href="{% url 'application_security_detail' activity.pk %}">{{ activity.name }}</a></td>
+							<td class="col-2" style="word-wrap:break-word;">{{ activity.url }}</td>
+							<td class="col-2">{{ activity.task.assigned_by.department.name }}</td>
+							<td class="col-2">{{ activity.task.assigned_by.department.location }}</td>
+							<td class="col-2">{{ activity.task.date_posted.date }}</td>
+							<td class="col-2">{{ activity.task.get_status_display }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
 			</table>
-
-		</ul>
 		{% else %}
-			<p>There are no application security assessment activities.</p>
+			<p>There are no penetration testing activities.</p>
 		{% endif %}
 	</div>
 
+	{% if is_paginated %}
+	<div class="pt-2 pb-2">
+		<div class="pagination justify-content-center">
+			{% if page_obj.has_previous %}
+			<li class="page-item" style="width: 90px">
+				<a class="page-link d-flex justify-content-center" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">
+			{% else %}
+			<li class="page-item disabled" style="width:90px">
+				<a class="page-link d-flex justify-content-center" href="#">
+			{% endif %}
+					Previous
+				</a>
+			</li>
+			<li class="page-item pl-3 pr-3">
+				<div class="mt-1 mb-1">
+					Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+				</div>
+			</li>
+			{% if page_obj.has_next %}
+			<li class="page-item" style="width: 90px">
+				<a class="page-link d-flex justify-content-center" href="{{ request.path }}?page={{ page_obj.next_page_number }}">
+			{% else %}
+			<li class="page-item disabled" style="width: 90px">
+				<a class="page-link d-flex justify-content-center" href="#">
+			{% endif %}
+					Next
+				</a>
+			</li>
+        </div>
+	</div>
+    {% endif %}
 	<!-- Content Row -->
 {% endblock %}

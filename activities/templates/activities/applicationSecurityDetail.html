@@ -4,7 +4,7 @@
 
 	<!-- Page Heading -->
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
-		<h1 class="h3 mb-0 text-gray-800">Application Security Assessment</h1>
+		<h1 class="h3 mb-0 text-gray-800">Penetration Testing</h1>
 	</div>
 	
 	<hr>
@@ -120,20 +120,20 @@
 				</tr>
 				<tr>
 					<td><strong>Category:</strong></td>
-					<td>{{application_security.category}}</td>
+					<td>{{application_security.get_category_display}}</td>
 				</tr>
 				<tr>
 					<td><strong>Owner:</strong></td>
-					<td>{{application_security.owner}}</td>
+					<td>{{application_security.owner|linebreaks}}</td>
 				</tr>
 				<tr>
 					<td><strong>Spoc:</strong></td>
-					<td>{{application_security.spoc}}</td>
+					<td>{{application_security.spoc|linebreaks}}</td>
 				</tr>
 
 				<tr>
 					<td><strong>Functionlity:</strong></td>
-					<td>{{application_security.functionality}}</td>
+					<td>{{application_security.functionality|linebreaks}}</td>
 				</tr>
 
 				<tr>
@@ -142,33 +142,33 @@
 				</tr>
 
 				<tr>
-					<td><strong>Lines of code:</strong></td>
+					<td><strong>Lines of code (approx.):</strong></td>
 					<td>{{application_security.loc}}</td>
 				</tr>
 
 				<tr>
 					<td><strong>Testing Type:</strong></td>
-					<td>{{application_security.testing_type}}</td>
+					<td>{{application_security.get_testing_type_display}}</td>
 				</tr>
 				<tr>
 					<td><strong>Accessibility:</strong></td>
-					<td>{{application_security.accessibility}}</td>
+					<td>{{application_security.get_accessibility_display}}</td>
 				</tr>
 				<tr>
 					<td><strong>Development:</strong></td>
-					<td>{{application_security.development}}</td>
+					<td>{{application_security.get_development_display}}</td>
 				</tr>
 				<tr>
 					<td><strong>Environment:</strong></td>
-					<td>{{application_security.environment}}</td>
+					<td>{{application_security.get_environment_display}}</td>
 				</tr>
-				<tr>
+<!--				<tr>
 					<td><strong>Page Count:</strong></td>
 					<td>{{application_security.page_count}}</td>
-				</tr>
+				</tr> -->
 				<tr>
 					<td><strong>Comments:</strong></td>
-					<td>{{application_security.comments}}</td>
+					<td>{{application_security.comments|linebreaks}}</td>
 				</tr>
 
 
@@ -181,7 +181,7 @@
 				<table class="table table-condensed" style="background-color:#d7e9f0;color:#555555;">
 					<tr>
 						<td><strong>Assigned by: </strong></td>
-						<td>{{application_security.task.assigned_by.username}}</td>
+						<td>{{application_security.task.assigned_by.user.first_name}} {{application_security.task.assigned_by.user.last_name}} ({{application_security.task.assigned_by.department.organization.name}})</td>
 					</tr>
 					<tr>
 						<td><strong>Assigned on: </strong></td>
@@ -199,7 +199,7 @@
 						{% else %}
 						<tr>
 							<td><strong>Assigned to:</strong></td>
-							<td>{{application_security.task.assigned_to.username}}</td>
+							<td>{{application_security.task.assigned_to.user.first_name}} {{application_security.task.assigned_to.user.last_name}} {% if application_security.task.assigned_to %} ({{application_security.task.assigned_to.department.organization.name}}) {% endif %} </td>
 						</tr>
 						<tr>
 							<td><strong>Status:</strong></td>

@@ -55,9 +55,9 @@ class Task(models.Model):
 	)
 
 	code = models.AutoField(primary_key=True)
-	assigned_by = models.ForeignKey(User, related_name='application_assigned_by', on_delete=models.PROTECT)
+	assigned_by = models.ForeignKey(UserProfile, related_name='application_assigned_by', on_delete=models.PROTECT)
 	date_posted = models.DateTimeField(auto_now_add=True)
-	assigned_to = models.ForeignKey(User, related_name='application_assigned_to',null=True, blank=True, on_delete=models.PROTECT)
+	assigned_to = models.ForeignKey(UserProfile, related_name='application_assigned_to',null=True, blank=True, on_delete=models.PROTECT)
 	status = models.CharField(max_length=100, choices=STATUS_CHOICES, blank=True, default='not_assigned')
 
 	def __str__(self):
@@ -83,25 +83,23 @@ class ApplicationSecurity(models.Model):
 		('third_party', 'Third Party'),
 	)
 	CATEGORY_CHOICES = (
-		('webappext','Web Application External'),
-		('webappint', 'Web Application Internal'),
-		('webserint', 'Web Service External'),
-		('webserint', 'Web Service Internal'),
-		('mobapp', 'Mobile Application'),
+		('webapp','Web Application'),
+		('webservice', 'Web Service'),
+		('mobileapp', 'Mobile Application'),
 	)
 	task = models.ForeignKey(Task, on_delete=models.CASCADE)
 	name = models.CharField(max_length=300)
-	category = models.TextField(max_length=50, choices=CATEGORY_CHOICES, null=True)
-	owner = models.TextField(null=True)
-	spoc = models.TextField(null=True)
+	category = models.TextField(max_length=50, choices=CATEGORY_CHOICES)
+	owner = models.TextField(null=True, blank=True)
+	spoc = models.TextField(null=True, blank=True)
 	url = models.URLField(max_length=300, null=True)
 	role_count = models.CharField(max_length=200, null=True)
 	functionality = models.TextField(max_length=500, null=True)
-	testing_type = models.TextField(max_length=50, choices=TESTING_CHOICES, null=True)
-	accessibility = models.CharField(max_length=20, choices=ACCESSIBILITY_CHOICES, null=True)
-	development = models.CharField(max_length=20, choices=DEVELOPMENT_CHOICES, null=True)
-	environment = models.CharField(max_length=20, choices=ENVIRONMENT_CHOICES, null=True)
-	page_count = models.IntegerField(null=True)
+	testing_type = models.TextField(max_length=50, choices=TESTING_CHOICES)
+	accessibility = models.CharField(max_length=20, choices=ACCESSIBILITY_CHOICES)
+	development = models.CharField(max_length=20, choices=DEVELOPMENT_CHOICES, null=True, blank=True)
+	environment = models.CharField(max_length=20, choices=ENVIRONMENT_CHOICES, null=True, blank=True)
+	page_count = models.IntegerField(null=True, blank=True)
 	loc = models.CharField(max_length=200, null=True)
 	files = models.FileField(upload_to='uploads/penetration_testing/', null=True, blank=True)
 	comments = models.TextField(null=True, blank=True)
