@@ -37,3 +37,11 @@ class VaptAssessmentAdmin(admin.ModelAdmin):
 @admin.register(ConfigurationReview)
 class ConfigurationReviewAdmin(admin.ModelAdmin):
 	pass
+
+@admin.register(Vulnerability)
+class VulnerabilityAdmin(admin.ModelAdmin):
+	pass
+
+@admin.register(BulkActivity)
+class BulkActivityAdmin(admin.ModelAdmin):
+	pass

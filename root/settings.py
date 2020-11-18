@@ -39,6 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'activities',
+	'axes',
+]
+
+AUTHENTICATION_BACKENDS = [
+	'axes.backends.AxesBackend',
+	'django.contrib.auth.backends.ModelBackend',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'root.urls'
@@ -125,4 +132,17 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATICFILES_DIRS = [ os.path.join(BASE_DIR,'staticFiles') ]
 
-LOGIN_REDIRECT_URL = '/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+LOGIN_URL = '/activities/login/'
+#LOGIN_REDIRECT_URL = '/'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 5400
+SESSION_SAVE_EVERY_REQUEST = True
+
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF_TIME = 1
+AXES_LOCKOUT_URL = '/activities/lockout/'
+AXES_ONLY_USER_FAILURES = True

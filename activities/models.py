@@ -38,7 +38,6 @@ class UserProfile(models.Model):
 	employee_id = models.CharField(max_length=50)
 	contact = models.CharField(max_length=16)
 	department = models.ForeignKey(Department, related_name='user_designation', on_delete=models.PROTECT)
-#	organization = models.ForeignKey(Organization, related_name='user_organization', on_delete=models.PROTECT)
 
 	def __str__(self):
 		return self.user.username
@@ -136,3 +135,27 @@ class ConfigurationReview(models.Model):
 
 	def __str__(self):
 		return str(self.task.code) + ' - ' + self.device_type
+
+class Criticality(models.Model):
+	name = models.CharField(max_length=20)
+
+class Vulnerability(models.Model):
+	observation = models.CharField(max_length=100)
+	detail = models.TextField()
+	affected_module = models.CharField(max_length=200)
+	crticality = models.ForeignKey(Criticality, on_delete=models.PROTECT)
+	risk = models.TextField()
+	recommendation = models.TextField()
+	year = models.CharField(max_length=6)
+	department = models.ForeignKey(Department, on_delete=models.PROTECT)
+
+class BulkActivity(models.Model):
+	ACTIVITY_CHOICE = (
+		(None, '----------------'),
+		('app_sec', 'Penetration Testing'),
+		('vapt', 'Vulnerability Assessment'),
+		('config_review','Configuration Audit'),
+	)
+
+	activity = models.CharField(max_length=50, choices=ACTIVITY_CHOICE, default=None)
+	files = models.FileField(upload_to='uploads/bulk_upload/')

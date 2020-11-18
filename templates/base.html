@@ -97,6 +97,7 @@
             <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'request_application_security' %}">Penetration Testing</a></p>
             <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'request_vapt_assessment' %}">Vulnerability Assessment</a></p>
             <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'request_config_review' %}">Configuration Audit</a></p>
+            <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'upload_activity' %}">Activity Upload</a></p>
           </div>
         </div>
       </li>
@@ -153,6 +154,11 @@
           </ul>
 
         </nav>
+		{% if message_title %}
+		<div class="alert {{ message_type }}">
+  			<strong>{{message_title}}</strong> {{message_body}}
+		</div>
+		{% endif %}
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
@@ -191,7 +197,7 @@
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="{% url 'logout' %}?next=../login/">Logout</a>
+          <a class="btn btn-primary" href="{% url 'login' %}">Logout</a>
         </div>
       </div>
     </div>

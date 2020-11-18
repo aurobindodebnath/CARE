@@ -44,7 +44,6 @@ class RequestApplicationSecurity(forms.Form):
 	development = forms.ChoiceField(label='Application Development', choices=DEVELOPMENT_CHOICES, initial=None, required=False)
 	environment = forms.ChoiceField(label='Application Environment', choices=ENVIRONMENT_CHOICES, initial=None, required=False)
 	loc = forms.IntegerField(label="Lines of Code (approx.)", help_text="Enter aprox. lines of code...", initial=0, required=False)
-	files = forms.FileField(label='Upload', required=False)
 	comments = forms.CharField(widget=forms.Textarea(attrs={'rows':8, 'placeholder':"Add comments..."}), required=False)
 
 	#TODO: Sanatize input
@@ -59,7 +58,6 @@ class RequestVaptAssessment(forms.Form):
 	device_type = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Enter device type...'}), required=False)
 	environment = forms.ChoiceField(choices=ENVIRONMENT_CHOICES, initial=None, required=False) 
 	location = forms.CharField( widget=forms.TextInput(attrs={'placeholder':'Enter site location...'}), required=False)
-	files = forms.FileField(label='Upload', required=False)
 	comments = forms.CharField(widget=forms.Textarea(attrs={'rows':8, 'placeholder':'Add any additional comments...'}), required=False)
 
 	#TODO: Sanatize input
@@ -72,7 +70,6 @@ class RequestConfigReview(forms.Form):
 	device_type = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Eg Router, Switch, Server, Database...'}), required=False)
 	location = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Site location, eg: MKHO, Mumbai...'}), required=False)
 	host_count = forms.IntegerField(label='No. of Hosts', initial=0, required=False)
-	files = forms.FileField(label='Upload', required=False)
 	comments = forms.CharField(widget=forms.Textarea(attrs={'rows':8, 'placeholder':'Add any additional comments...'}), required=False)
 	
 	#TODO: Sanatize input
@@ -84,6 +81,30 @@ class UpdateTask(forms.Form):
 		('completed', 'Completed'),
 		('rejected', 'Rejected'),
 	)
-
-	assigned_to = forms.ChoiceField(choices=[(up.pk, str(up.user.first_name + " " + up.user.last_name + " (" + up.department.organization.name + ")")) for up in UserProfile.objects.filter(department__organization__name__exact="KPMG")])
+	USERS_CHOICE = [
+		(None, '----------'),
+	]
+	for up in UserProfile.objects.filter(department__organization__name__exact="KPMG"):
+		USERS_CHOICE += [(up.pk, str(up.user.first_name + " " + up.user.last_name + " (" + up.department.organization.name + ")"))]
+	assigned_to = forms.ChoiceField(choices=USERS_CHOICE)
 	status = forms.ChoiceField(choices=STATUS_CHOICE)
+
+class ActivityUploadForm(forms.ModelForm):
+	class Meta:
+		model = BulkActivity
+		fields = ('activity', 'files')
+		labels = {
+			'activity': _('Activity Type'),
+			'files': _('Upload')
+		}
+
+#class ActivityUploadForm(forms.Form):
+#	ACTIVITY_CHOICE = (
+#		(None, '-----------------'),
+#		('app_sec', 'Penetration Testing'),
+#		('vapt', 'Vulnerability Assessment'),
+#		('config_review', 'Configuration Audit'),
+#	)
+
+#	activity = forms.ChoiceField(label='Activity Type', choices=ACTIVITY_CHOICE)
+#	files = forms.FileField(label='Upload')

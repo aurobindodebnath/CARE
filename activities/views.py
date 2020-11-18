@@ -1,11 +1,39 @@
+import magic
+from openpyxl import load_workbook
 from django.shortcuts import render, get_object_or_404
 from activities.models import * 
 from django.views import generic
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from activities.forms import *
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth import authenticate, login, logout
+
+def custom_login(request):
+	if request.method == 'GET':
+		logout(request)
+		return render(request, 'login.html')
+	elif request.method == 'POST':
+		username=request.POST['username']
+		password=request.POST['password']
+		user = authenticate(request, username=username, password=password)
+		if user is not None:
+			login(request, user)
+			return HttpResponseRedirect(reverse('index'))
+		else:
+			context = {
+				'login_message': 'Incorrect username or password.',
+			}
+			return render(request, 'login.html', context=context)
+	return render(request, 'login.html')
+
+def lockout(request):
+	context = {
+		'login_message': 'Your account has been lockedout after multiple attempts. Please try again after 1 hour.',
+		'disable_status': 'disabled',
+	}
+	return render(request, 'login.html', context=context)
 
 @login_required
 def index(request):
@@ -312,11 +340,13 @@ class ApplicationSecurityDetailView(LoginRequiredMixin, generic.DetailView):
 		context = super().get_context_data(**kwargs)
 		app = ApplicationSecurity.objects.all()
 		
+		activity_task = get_object_or_404(ApplicationSecurity, pk=self.kwargs['pk']).task
 		if self.request.user.groups.filter(name="Client").exists():
+			if not activity_task.assigned_by.user == self.request.user:
+				return None 
 			app = app.filter(task__assigned_by__user=self.request.user)
 		else:
-			activity_task = get_object_or_404(ApplicationSecurity, pk=self.kwargs['pk']).task
-			context['form'] = UpdateTask(initial={'status': activity_task.status, 'assigned_to': activity_task.assigned_to.pk})
+			context['form'] = UpdateTask(initial={'status': activity_task.status, 'assigned_to': activity_task.assigned_to.pk if activity_task.assigned_to else None})
 			
 		context['total'] = app.count()
 		context['not_assigned'] = app.filter(task__status__exact="not_assigned").count()
@@ -335,11 +365,13 @@ class VaptAssessmentDetailView(LoginRequiredMixin, generic.DetailView):
 		context = super().get_context_data(**kwargs)
 		vapt = VaptAssessment.objects.all()
 		
+		activity_task = get_object_or_404(VaptAssessment, pk=self.kwargs['pk']).task
 		if self.request.user.groups.filter(name="Client").exists():
+			if not activity_task.assigned_by.user == self.request.user:
+				return None 
 			vapt = vapt.filter(task__assigned_by__user=self.request.user)
 		else:
-			activity_task = get_object_or_404(VaptAssessment, pk=self.kwargs['pk']).task
-			context['form'] = UpdateTask(initial={'status': activity_task.status, 'assigned_to': activity_task.assigned_to.pk})
+			context['form'] = UpdateTask(initial={'status': activity_task.status, 'assigned_to': activity_task.assigned_to.pk if activity_task.assigned_to else None})
 			
 		context['total'] = vapt.count()
 		context['not_assigned'] = vapt.filter(task__status__exact="not_assigned").count()
@@ -358,21 +390,24 @@ class ConfigurationReviewDetailView(LoginRequiredMixin, generic.DetailView):
 		context = super().get_context_data(**kwargs)
 		config = ConfigurationReview.objects.all()
 		
+		activity_task = get_object_or_404(ConfigurationReview, pk=self.kwargs['pk']).task
 		if self.request.user.groups.filter(name="Client").exists():
+			if not activity_task.assigned_by.user == self.request.user:
+				return None 
 			config = config.filter(task__assigned_by__user=self.request.user)
 		else:
-			activity_task = get_object_or_404(ConfigurationReview, pk=self.kwargs['pk']).task
-			context['form'] = UpdateTask(initial={'status': activity_task.status, 'assigned_to': activity_task.assigned_to.pk})
+			context['form'] = UpdateTask(initial={'status': activity_task.status, 'assigned_to': activity_task.assigned_to.pk if activity_task.assigned_to else None})
 			
-		context['total'] = vapt.count()
-		context['not_assigned'] = vapt.filter(task__status__exact="not_assigned").count()
-		context['in_progress'] = vapt.filter(task__status__exact="in_progress").count()
-		context['rejected'] = vapt.filter(task__status__exact="rejected").count()
-		context['completed'] = vapt.filter(task__status__exact="completed").count()
+		context['total'] = config.count()
+		context['not_assigned'] = config.filter(task__status__exact="not_assigned").count()
+		context['in_progress'] = config.filter(task__status__exact="in_progress").count()
+		context['rejected'] = config.filter(task__status__exact="rejected").count()
+		context['completed'] = config.filter(task__status__exact="completed").count()
 
 		return context
 
 @login_required
+@permission_required('activities.add_task', raise_exception=True)
 def requestApplicationSecurity(request):
 	if request.method == 'POST':
 		form = RequestApplicationSecurity(request.POST)
@@ -413,6 +448,7 @@ def requestApplicationSecurity(request):
 	return render(request, 'activities/request_application_security.html', context)
 
 @login_required
+@permission_required('activities.add_task', raise_exception=True)
 def requestVaptAssessment(request):
 	if request.method == 'POST':
 		form = RequestVaptAssessment(request.POST)
@@ -445,6 +481,7 @@ def requestVaptAssessment(request):
 	return render(request, 'activities/request_vapt_assessment.html', context)
 
 @login_required
+@permission_required('activities.add_task', raise_exception=True)
 def requestConfigReview(request):
 	if request.method == 'POST':
 		form = RequestConfigReview(request.POST)
@@ -542,3 +579,37 @@ def updateTaskConfig(request, pk):
 #	}
 #
 #	return render(request, 'activites/applicationSecurityDetail.html', context)
+
+@login_required
+@permission_required('activities.add_task', raise_exception=True)
+def activityUpload(request):
+	if request.method == 'POST':
+		form = ActivityUploadForm(request.POST, request.FILES)
+		files = request.FILES['files']
+		file_type = magic.from_buffer(files.read())
+		if not "Microsoft Excel" in file_type:
+			context = {
+				'message_type' : 'alert-danger',
+				'message_title' : 'Error!',
+				'message_body' : 'Invalid file type.',
+			}
+		elif form.is_valid():
+			form.save()
+			context = {
+				'message_type' : 'alert-success',
+				'message_title' : 'Success!',
+				'message_body' : 'Bulk activity requested.',
+			}
+		else:
+			context = {
+				'message_type' : 'alert-danger',
+				'message_title' : 'Error!',
+				'message_body' : 'Invalid form.',
+			}
+
+	form = ActivityUploadForm()
+	context.update({
+		'form': form,
+	})
+
+	return render(request, 'activities/activity_upload.html', context=context)
