@@ -12,3 +12,5 @@ In python3
 5. Make migrations:  python manage.py makemigrations
 6. Migrate: python manage.py migrate
 7. Runserver: python manage.py runserver
+
+Note: Install https://pypi.python.org/pypi/python-magic-bin/0.4.14 for windows

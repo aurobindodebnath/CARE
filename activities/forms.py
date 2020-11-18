@@ -92,9 +92,9 @@ class UpdateTask(forms.Form):
 class ActivityUploadForm(forms.ModelForm):
 	class Meta:
 		model = BulkActivity
-		fields = ('activity', 'files')
+		fields = ('category', 'files')
 		labels = {
-			'activity': _('Activity Type'),
+			'category': _('Activity Category'),
 			'files': _('Upload')
 		}
 

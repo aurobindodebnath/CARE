@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -150,12 +151,16 @@ class Vulnerability(models.Model):
 	department = models.ForeignKey(Department, on_delete=models.PROTECT)
 
 class BulkActivity(models.Model):
-	ACTIVITY_CHOICE = (
+	CATEGORY_CHOICE = (
 		(None, '----------------'),
 		('app_sec', 'Penetration Testing'),
 		('vapt', 'Vulnerability Assessment'),
 		('config_review','Configuration Audit'),
 	)
 
-	activity = models.CharField(max_length=50, choices=ACTIVITY_CHOICE, default=None)
+	task = models.ForeignKey(Task, on_delete=models.CASCADE)
+	category = models.CharField(max_length=50, choices=CATEGORY_CHOICE, default=None)
 	files = models.FileField(upload_to='uploads/bulk_upload/')
+	
+	def filename(self):
+		return os.path.basename(self.files.name)

@@ -10,6 +10,7 @@ urlpatterns = [
 	path('application_security/', views.ApplicationSecurityListView.as_view(), name='application_security'),
 	path('vapt_assessment/', views.VaptAssessmentListView.as_view(), name='vapt_assessment'),
 	path('config_review/', views.ConfigurationReviewListView.as_view(), name='config_review'),
+	path('bulk_activity/', views.BulkActivityListView.as_view(), name='bulk_activity'),
 
 	#Application Security Categories
 	#TODO: Convert URLs to Application security parameters
@@ -23,6 +24,7 @@ urlpatterns = [
 	path('application_security/<int:pk>/', views.ApplicationSecurityDetailView.as_view(), name='application_security_detail'),
 	path('vapt_assessment/<int:pk>/', views.VaptAssessmentDetailView.as_view(), name='vapt_assessment_detail'),
 	path('config_review/<int:pk>/', views.ConfigurationReviewDetailView.as_view(), name='config_review_detail'),
+#	path('bulk_activity/<int:pk>/', views.BulkActivityDetailView.as_view(), name='bulk_activity_detail'),
 
 	#Activity Request Forms
 	path('request/application_security/', views.requestApplicationSecurity, name='request_application_security'),

@@ -331,6 +331,33 @@ class ConfigurationReviewListView(LoginRequiredMixin, generic.ListView):
 
 		return context
 
+class BulkActivityListView(LoginRequiredMixin, generic.ListView):
+	model = BulkActivity
+	context_object_name = 'bulk_activity_list'
+	template_name = 'activities/bulkActivity.html'
+	paginate_by = 15
+
+	def get_queryset(self):
+		bulk = BulkActivity.objects.all().order_by('-task__date_posted')
+		if self.request.user.groups.filter(name="Client").exists():
+			return bulk.filter(task__assigned_by__user=self.request.user)
+		return bulk
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		bulk = BulkActivity.objects.all()
+		
+		if self.request.user.groups.filter(name="Client").exists():
+			bulk = bulk.filter(task__assigned_by__user=self.request.user)
+			
+		context['total'] = bulk.count()
+		context['not_assigned'] = bulk.filter(task__status__exact="not_assigned").count()
+		context['in_progress'] = bulk.filter(task__status__exact="in_progress").count()
+		context['rejected'] = bulk.filter(task__status__exact="rejected").count()
+		context['completed'] = bulk.filter(task__status__exact="completed").count()
+
+		return context
+
 class ApplicationSecurityDetailView(LoginRequiredMixin, generic.DetailView):
 	model = ApplicationSecurity
 	context_object_name = 'application_security'
@@ -406,6 +433,32 @@ class ConfigurationReviewDetailView(LoginRequiredMixin, generic.DetailView):
 
 		return context
 
+#Delete after check
+class BulkActivityDetailView(LoginRequiredMixin, generic.DetailView):
+	model = BulkActivity
+	context_object_name = 'bulk_activity_list'
+	template_name = 'activities/BulkActivityDetail.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		bulk = BulkActivity.objects.all()
+		
+		activity_task = get_object_or_404(BulkActivity, pk=self.kwargs['pk']).task
+		if self.request.user.groups.filter(name="Client").exists():
+			if not activity_task.assigned_by.user == self.request.user:
+				return None 
+			bulk = bulk.filter(task__assigned_by__user=self.request.user)
+		else:
+			context['form'] = UpdateTask(initial={'status': activity_task.status, 'assigned_to': activity_task.assigned_to.pk if activity_task.assigned_to else None})
+			
+		context['total'] = bulk.count()
+		context['not_assigned'] = bulk.filter(task__status__exact="not_assigned").count()
+		context['in_progress'] = bulk.filter(task__status__exact="in_progress").count()
+		context['rejected'] = bulk.filter(task__status__exact="rejected").count()
+		context['completed'] = bulk.filter(task__status__exact="completed").count()
+
+		return context
+
 @login_required
 @permission_required('activities.add_task', raise_exception=True)
 def requestApplicationSecurity(request):
@@ -430,21 +483,30 @@ def requestApplicationSecurity(request):
 				development = form.cleaned_data['development'],
 				environment = form.cleaned_data['environment'],
 				functionality=form.cleaned_data['functionality'],
-			#	page_count = form.cleaned_data['page_count'],
 				role_count=form.cleaned_data['role_count'],
 				loc=form.cleaned_data['loc'],
 				comments=form.cleaned_data['comments'],
 			)
 			task.save()
 			new_application.save()
-			return HttpResponseRedirect(reverse('index'))
-
+			context = {
+				'message_type' : 'alert-success',
+				'message_title' : 'Success!',
+				'message_body' : 'Penetration Testing requested!',
+			}
+		else:
+			context = {
+				'message_type' : 'alert-danger',
+				'message_title' : 'Error!',
+				'message_body' : 'Please check your input!',
+			}
 	else:
-		form = RequestApplicationSecurity()
+		context = {}
 
-	context = {
+	form = RequestApplicationSecurity()
+	context.update({
 		'form':  form,
-	}
+	})
 	return render(request, 'activities/request_application_security.html', context)
 
 @login_required
@@ -465,19 +527,29 @@ def requestVaptAssessment(request):
 				spoc=form.cleaned_data['spoc'],
 				device_type=form.cleaned_data['device_type'],
 				environment = form.cleaned_data['environment'],
-				location = form.cleaned_data['files'],
+				location = form.cleaned_data['location'],
 				comments=form.cleaned_data['comments'],
 			)
 			task.save()
 			new_application.save()
-			return HttpResponseRedirect(reverse('index'))
-
+			context = {
+				'message_type' : 'alert-success',
+				'message_title' : 'Success!',
+				'message_body' : 'Vulnerability Assessment requested!',
+			}
+		else:
+			context = {
+				'message_type' : 'alert-danger',
+				'message_title' : 'Error!',
+				'message_body' : 'Please check your input!',
+			}
 	else:
-		form = RequestVaptAssessment()
-
-	context = {
+		context = {}
+	
+	form = RequestVaptAssessment()
+	context.update({
 		'form':  form,
-	}
+	})
 	return render(request, 'activities/request_vapt_assessment.html', context)
 
 @login_required
@@ -503,17 +575,88 @@ def requestConfigReview(request):
 			)
 
 			new_application.save()
-			return HttpResponseRedirect(reverse('index'))
-
+			context = {
+				'message_type' : 'alert-success',
+				'message_title' : 'Success!',
+				'message_body' : 'Configuration Audit requested!',
+			}
+		else:
+			context = {
+				'message_type' : 'alert-danger',
+				'message_title' : 'Error!',
+				'message_body' : 'Please check your input!',
+			}
 	else:
-		form = RequestConfigReview()
+		context = {}
 
-	context = {
-		'form':  form,
-	}
+	form = RequestConfigReview()
+	context.update({
+		'form': form,
+	})
 
 	return render(request, 'activities/request_config_review.html', context)
 
+@login_required
+@permission_required('activities.add_task', raise_exception=True)
+def activityUpload(request):
+	if request.method == 'POST':
+		form = ActivityUploadForm(request.POST, request.FILES)
+
+		files = request.FILES['files']
+		file_type = magic.from_buffer(files.read())
+		file_name = str(files)
+		file_extension = file_name.split('.')
+		valid_extension = ['xlsx', 'xls']
+		
+		if len(file_extension) > 2:
+			context = {
+				'message_type' : 'alert-danger',
+				'message_title' : 'Error!',
+				'message_body' : 'File with multiple extension is not allowed!',
+			}
+		elif not file_extension[1] in valid_extension:
+			context = {
+				'message_type' : 'alert-danger',
+				'message_title' : 'Error!',
+				'message_body' : 'File with given extension is not allowed!',
+			}
+		elif not "Microsoft Excel" in file_type:
+			context = {
+				'message_type' : 'alert-danger',
+				'message_title' : 'Error!',
+				'message_body' : 'Invalid file type!',
+			}
+		elif form.is_valid():
+			task = Task(
+				assigned_by = get_object_or_404(UserProfile, pk=request.user.user_profile.pk),
+			)
+			task.save()
+			form = BulkActivity(
+				task = task,
+				category = form.cleaned_data['category'],
+				files = files,
+			)
+			form.save()
+			context = {
+				'message_type' : 'alert-success',
+				'message_title' : 'Success!',
+				'message_body' : 'Bulk Activity requested!',
+			}
+		else:
+			context = {
+				'message_type' : 'alert-danger',
+				'message_title' : 'Error!',
+				'message_body' : 'Please check your input!',
+			}
+	else:
+		context = {}
+
+	form = ActivityUploadForm()
+	context.update({
+		'form': form,
+	})
+
+	return render(request, 'activities/request_bulk_activity.html', context=context)
 ########################################################################
 
 def updateTaskApplication(request, pk):
@@ -580,36 +723,3 @@ def updateTaskConfig(request, pk):
 #
 #	return render(request, 'activites/applicationSecurityDetail.html', context)
 
-@login_required
-@permission_required('activities.add_task', raise_exception=True)
-def activityUpload(request):
-	if request.method == 'POST':
-		form = ActivityUploadForm(request.POST, request.FILES)
-		files = request.FILES['files']
-		file_type = magic.from_buffer(files.read())
-		if not "Microsoft Excel" in file_type:
-			context = {
-				'message_type' : 'alert-danger',
-				'message_title' : 'Error!',
-				'message_body' : 'Invalid file type.',
-			}
-		elif form.is_valid():
-			form.save()
-			context = {
-				'message_type' : 'alert-success',
-				'message_title' : 'Success!',
-				'message_body' : 'Bulk activity requested.',
-			}
-		else:
-			context = {
-				'message_type' : 'alert-danger',
-				'message_title' : 'Error!',
-				'message_body' : 'Invalid form.',
-			}
-
-	form = ActivityUploadForm()
-	context.update({
-		'form': form,
-	})
-
-	return render(request, 'activities/activity_upload.html', context=context)

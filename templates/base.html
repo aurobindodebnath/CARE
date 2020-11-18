@@ -84,6 +84,11 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Configuration Audit</span></a>
       </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'bulk_activity' %}">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Bulk Data</span></a>
+      </li>
       
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -97,7 +102,7 @@
             <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'request_application_security' %}">Penetration Testing</a></p>
             <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'request_vapt_assessment' %}">Vulnerability Assessment</a></p>
             <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'request_config_review' %}">Configuration Audit</a></p>
-            <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'upload_activity' %}">Activity Upload</a></p>
+            <p style="padding-left: 10px;"><a class="collapse-item" href="{% url 'upload_activity' %}">Bulk Data Upload</a></p>
           </div>
         </div>
       </li>
