@@ -89,7 +89,6 @@ class ApplicationSecurity(models.Model):
 	)
 	task = models.ForeignKey(Task, on_delete=models.CASCADE)
 	name = models.CharField(max_length=300)
-	category = models.TextField(max_length=50, choices=CATEGORY_CHOICES)
 	owner = models.TextField(null=True, blank=True)
 	spoc = models.TextField(null=True, blank=True)
 	url = models.URLField(max_length=300, null=True)
@@ -99,9 +98,10 @@ class ApplicationSecurity(models.Model):
 	accessibility = models.CharField(max_length=20, choices=ACCESSIBILITY_CHOICES)
 	development = models.CharField(max_length=20, choices=DEVELOPMENT_CHOICES, null=True, blank=True)
 	environment = models.CharField(max_length=20, choices=ENVIRONMENT_CHOICES, null=True, blank=True)
-	page_count = models.IntegerField(null=True, blank=True)
-	loc = models.CharField(max_length=200, null=True)
-	files = models.FileField(upload_to='uploads/penetration_testing/', null=True, blank=True)
+	loc = models.CharField(max_length=200, null=True) #for Whitebox
+	category = models.TextField(max_length=50, choices=CATEGORY_CHOICES)
+	page_count = models.IntegerField(null=True, blank=True) #check and remove
+	files = models.FileField(upload_to='uploads/penetration_testing/', null=True, blank=True) #check and remove
 	comments = models.TextField(null=True, blank=True)
 
 	def __str__(self):
@@ -116,8 +116,11 @@ class VaptAssessment(models.Model):
 	device_type = models.TextField(null=True)
 	environment = models.CharField(max_length=20, choices=ENVIRONMENT_CHOICES, null=True)
 	location = models.TextField(null=True)
-	files = models.FileField(upload_to='uploads/vulnerability_assessment/', null=True, blank=True)
+	files = models.FileField(upload_to='uploads/vulnerability_assessment/', null=True, blank=True) #check and remove
 	comments = models.TextField(null=True, blank=True)
+
+	#Proposed Audit date
+	#Proposed Audit Time
 
 	def __str__(self):
 		return str(self.task.code) + ' - ' + self.ip_address
@@ -130,8 +133,8 @@ class ConfigurationReview(models.Model):
 	spoc = models.TextField(null=True)
 	device_type = models.TextField(null=True)
 	location = models.TextField(null=True)
-	host_count = models.IntegerField(null=True)
-	files = models.FileField(upload_to='uploads/configuration_review/', null=True, blank=True)
+	host_count = models.IntegerField(null=True) #not in IDR 
+	files = models.FileField(upload_to='uploads/configuration_review/', null=True, blank=True) #check and remove
 	comments = models.TextField(null=True, blank=True)
 
 	def __str__(self):
@@ -156,6 +159,7 @@ class BulkActivity(models.Model):
 		('app_sec', 'Penetration Testing'),
 		('vapt', 'Vulnerability Assessment'),
 		('config_review','Configuration Audit'),
+		('multiple','Multiple Activities'),
 	)
 
 	task = models.ForeignKey(Task, on_delete=models.CASCADE)

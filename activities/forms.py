@@ -36,7 +36,7 @@ class RequestApplicationSecurity(forms.Form):
 	category = forms.ChoiceField(label='Category', choices=CATEGORY_CHOICES, initial=None)
 	owner = forms.CharField(label='Application Owner',  widget=forms.Textarea(attrs={'rows':4, 'placeholder':'Enter owner name, email and contact no...'}), required=False)
 	spoc = forms.CharField(label='Division SPOC',  widget=forms.Textarea(attrs={'rows':4, 'placeholder':'Enter Division SPOC detail...'}), required=False)
-	url = forms.CharField(label='Application URL',  widget=forms.TextInput(attrs={'placeholder':"Enter application's URL..."}))
+	url = forms.CharField(label='Application URL',  widget=forms.Textarea(attrs={'rows':2, 'placeholder':"Enter application's(or APK/IPA) URL..."}))
 	role_count = forms.IntegerField(label="No. of roles", help_text="Enter number of roles in application...", initial=0, required=False)
 	functionality = forms.CharField( widget=forms.Textarea(attrs={'rows':4, 'placeholder':"Describe application's functionality..."}), required=False)
 	testing_type = forms.ChoiceField(label='Testing Type', choices=TESTING_CHOICES, help_text='Select type of testing to be performed...', initial=None)
@@ -44,7 +44,7 @@ class RequestApplicationSecurity(forms.Form):
 	development = forms.ChoiceField(label='Application Development', choices=DEVELOPMENT_CHOICES, initial=None, required=False)
 	environment = forms.ChoiceField(label='Application Environment', choices=ENVIRONMENT_CHOICES, initial=None, required=False)
 	loc = forms.IntegerField(label="Lines of Code (approx.)", help_text="Enter aprox. lines of code...", initial=0, required=False)
-	comments = forms.CharField(widget=forms.Textarea(attrs={'rows':8, 'placeholder':"Add comments..."}), required=False)
+	comments = forms.CharField(widget=forms.Textarea(attrs={'rows':8, 'placeholder':"Enter additional comments (e.g. type of web service/application)..."}), required=False)
 
 	#TODO: Sanatize input
 
@@ -58,7 +58,7 @@ class RequestVaptAssessment(forms.Form):
 	device_type = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Enter device type...'}), required=False)
 	environment = forms.ChoiceField(choices=ENVIRONMENT_CHOICES, initial=None, required=False) 
 	location = forms.CharField( widget=forms.TextInput(attrs={'placeholder':'Enter site location...'}), required=False)
-	comments = forms.CharField(widget=forms.Textarea(attrs={'rows':8, 'placeholder':'Add any additional comments...'}), required=False)
+	comments = forms.CharField(widget=forms.Textarea(attrs={'rows':8, 'placeholder':'Enter additional comments (e.g. Propsed date and time)...'}), required=False)
 
 	#TODO: Sanatize input
 
