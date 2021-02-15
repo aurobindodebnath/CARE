@@ -1,0 +1,480 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+          </div>
+          
+          <hr>
+
+          <!-- Content Row -->
+          <div class="row">
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=cois" class="nounderline">
+              <div id='card_cois' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_cois' class="h5 font-weight-bold text-primary text-align-center text-uppercase">COIS</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=mkho" class="nounderline">
+              <div id='card_mkho' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_mkho' class="h5 font-weight-bold text-primary text-align-center text-uppercase">MKHO</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=rhq" class="nounderline">
+              <div id='card_rhq' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_rhq' class="h5 font-weight-bold text-primary text-align-center text-uppercase">RHQ</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=plho" class="nounderline">
+              <div id='card_plho' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_plho' class="h5 font-weight-bold text-primary text-align-center text-uppercase">PLHO</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=r%26d" class="nounderline">
+              <div id='card_r&d' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_r&d' class="h5 font-weight-bold text-primary text-align-center text-uppercase">R&D</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=bd" class="nounderline">
+              <div id='card_bd' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_bd' class="h5 font-weight-bold text-primary text-align-center text-uppercase">BD</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+		  </div>
+
+          <hr>
+          
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h4 class="h4 mb-0 text-gray-800">Total Tasks</h4>
+          </div>
+
+          <!-- Content Row -->
+          <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Requested</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Completed</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_completed }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">In Progress</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_in_progress }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">To be Assigned</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_not_assigned}}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="col-xl-2 col-md-6 mb-3">
+            <div class="card border-left-danger shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Rejected As Invalid</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_rejected }}</div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          
+		  <hr>
+
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h4 class="h4 mb-0 text-gray-800">Penetration Testing</h4>
+          </div>
+
+          <!-- Content Row -->
+          <div class="row">
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline no_filter" href="{% url 'application_security' %}">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Requested</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ app_sec.total }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			  </a>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'application_security' %}?status=completed">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Completed</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ app_sec.completed }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			  </a>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'application_security' %}?status=in_progress">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">In Progress</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ app_sec.in_progress }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			  </a>
+            </div>
+
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'application_security' %}?status=not_assigned">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">To be Assigned</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ app_sec.not_assigned }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			  </a>
+            </div>
+          
+          <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'application_security' %}?status=rejected">
+            <div class="card border-left-danger shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Rejected</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ app_sec.rejected }}</div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+			</a>
+          </div>
+          </div>
+        
+          <br>
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h4 class="h4 mb-0 text-gray-800">Vulnerability Assessment</h4>
+          </div>
+
+          <!-- Content Row -->
+          <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline no_filter" href="{% url 'vapt_assessment' %}">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Requested</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vapt.total }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'vapt_assessment' %}?status=completed">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Completed</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vapt.completed }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'vapt_assessment' %}?status=in_progress">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">In Progress</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vapt.in_progress }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'vapt_assessment' %}?status=not_assigned">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">To be Assigned</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vapt.not_assigned }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'vapt_assessment' %}?status=rejected">
+            <div class="card border-left-danger shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Rejected</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vapt.rejected }}</div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        
+          <br>
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h4 class="h4 mb-0 text-gray-800">Configuration Audit</h4>
+          </div>
+
+          <!-- Content Row -->
+          <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline no_filter" href="{% url 'config_review' %}">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Requested</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ config.total }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'config_review' %}?status=completed">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Completed</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ config.completed }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'config_review' %}?status=in_progress">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">In Progress</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ config.in_progress }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'config_review' %}?status=not_assigned">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">To be Assigned</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ config.not_assigned }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+          
+          <div class="col-xl-2 col-md-6 mb-3">
+			<a class="nounderline filter" href="{% url 'config_review' %}?status=rejected">
+            <div class="card border-left-danger shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Rejected</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ config.rejected }}</div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+		</a>
+          </div>
+  {% endblock %}

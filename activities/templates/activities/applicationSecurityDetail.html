@@ -104,13 +104,17 @@
 		<div class="col-xl-12 col-md-12 mb-12">
 			<div class="card border-left-primary shadow h-100 py-2">
 			  <div class="card-body">
-	<a href="{% url 'application_security' %}">Back</a>
+	<a onclick="window.history.go(-2)" href="#">Back</a>
 				<div class="row no-gutters align-items-center">
 				  <div class="col mr-2">
 	
 
 		<div class="container-fluid" style="background-color:#496fdb; color:white; padding:20px;border-radius: 5px;">
-			<h3><span style="background-color: white;color:blue;padding:3px;border-radius:4px;">{{application_security.task.code}}</span> &nbsp;&nbsp;&nbsp; Application Name: <span><b>{{application_security.name}}</b></span></h3>
+			<h3>
+				<span style="background-color: white;color:blue;padding:3px;border-radius:4px;">{{application_security.task.code}}</span>
+				<!-- &nbsp;&nbsp;&nbsp; Application Name: -->
+				<span><b>&nbsp;{{application_security.name}}</b></span>
+			</h3>
 		</div>
 		<div class="container-fluid" style="border-bottom:1px solid grey">
 			<table class="table table-condensed">
@@ -123,6 +127,38 @@
 					<td>{{application_security.get_category_display}}</td>
 				</tr>
 				<tr>
+					<td><strong>Accessibility:</strong></td>
+					<td>{{application_security.get_accessibility_display}}</td>
+				</tr>
+				<tr>
+					<td><strong>Testing Type:</strong></td>
+					<td>{{application_security.get_testing_type_display}}</td>
+				</tr>
+				<tr>
+					<td><strong>Environment:</strong></td>
+					<td>{{application_security.get_environment_display}}</td>
+				</tr>
+				<tr>
+					<td><strong>Development:</strong></td>
+					<td>{{application_security.get_development_display}}</td>
+				</tr>
+				<tr>
+					<td><strong>Critical Application:</strong></td>
+					<td>{{application_security.get_critical_display}}</td>
+				</tr>
+				<tr>
+					<td><strong>Functionlity:</strong></td>
+					<td>{{application_security.functionality|linebreaks}}</td>
+				</tr>
+				<tr>
+					<td><strong>No. of Roles:</strong></td>
+					<td>{{application_security.role_count}}</td>
+				</tr>
+				<tr>
+					<td><strong>Lines of code (approx.):</strong></td>
+					<td>{{application_security.loc}}</td>
+				</tr>
+				<tr>
 					<td><strong>Owner:</strong></td>
 					<td>{{application_security.owner|linebreaks}}</td>
 				</tr>
@@ -130,49 +166,10 @@
 					<td><strong>Spoc:</strong></td>
 					<td>{{application_security.spoc|linebreaks}}</td>
 				</tr>
-
-				<tr>
-					<td><strong>Functionlity:</strong></td>
-					<td>{{application_security.functionality|linebreaks}}</td>
-				</tr>
-
-				<tr>
-					<td><strong>No. of Roles:</strong></td>
-					<td>{{application_security.role_count}}</td>
-				</tr>
-
-				<tr>
-					<td><strong>Lines of code (approx.):</strong></td>
-					<td>{{application_security.loc}}</td>
-				</tr>
-
-				<tr>
-					<td><strong>Testing Type:</strong></td>
-					<td>{{application_security.get_testing_type_display}}</td>
-				</tr>
-				<tr>
-					<td><strong>Accessibility:</strong></td>
-					<td>{{application_security.get_accessibility_display}}</td>
-				</tr>
-				<tr>
-					<td><strong>Development:</strong></td>
-					<td>{{application_security.get_development_display}}</td>
-				</tr>
-				<tr>
-					<td><strong>Environment:</strong></td>
-					<td>{{application_security.get_environment_display}}</td>
-				</tr>
-<!--				<tr>
-					<td><strong>Page Count:</strong></td>
-					<td>{{application_security.page_count}}</td>
-				</tr> -->
 				<tr>
 					<td><strong>Comments:</strong></td>
 					<td>{{application_security.comments|linebreaks}}</td>
 				</tr>
-
-
-
 			</table>
 		</div>
 		<div class="container-fluid">

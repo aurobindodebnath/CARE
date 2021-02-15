@@ -17,7 +17,7 @@
 		
 		<!-- Earnings (Monthly) Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-primary shadow h-100 py-2">
+			<div class="card border-left-primary h-100 py-2 shadow">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -34,7 +34,7 @@
 
 		<!-- Earnings (Monthly) Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-success shadow h-100 py-2">
+			<div class="card border-left-success h-100 py-2 shadow">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -51,7 +51,7 @@
 
 		<!-- Earnings (Monthly) Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-info shadow h-100 py-2">
+			<div class="card border-left-info h-100 py-2 shadow">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -68,7 +68,7 @@
 
 		<!-- Pending Requests Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-warning shadow h-100 py-2">
+			<div class="card border-left-warning h-100 py-2 shadow">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -84,7 +84,7 @@
 			</div>
 
 			<div class="col-xl-2 col-md-6 mb-3">
-				<div class="card border-left-danger shadow h-100 py-2">
+				<div class="card border-left-danger h-100 py-2 shadow">
 					<div class="card-body">
 						<div class="row no-gutters align-items-center">
 							<div class="col mr-2">
@@ -113,12 +113,20 @@
 									<span style="background-color: white;color:blue;padding:3px;border-radius:4px;">
 										{{config_review_list.task.code}}
 									</span>
-									&nbsp;&nbsp;&nbsp; 
-									IP Address: <span><b>{{config_review_list.ip_address}}</b></span>
+									<!--&nbsp;&nbsp;&nbsp; IP Address:-->
+									<span><b>&nbsp;{{config_review_list.name}}</b></span>
 								</h3>
 							</div>
 							<div class="container-fluid" style="border-bottom:1px solid grey">
 								<table class="table table-condensed">
+									<tr>
+										<td><strong>Host(s):</strong></td>
+										<td>{{config_review_list.host_name}}</td>
+									</tr>
+									<tr>
+										<td><strong>Host Count:</strong></td>
+										<td>{{config_review_list.item_count}}</td>
+									</tr>
 									<tr>
 										<td><strong>Device Type:</strong></td>
 										<td>{{config_review_list.device_type}}</td>
@@ -136,10 +144,6 @@
 										<td>{{config_review_list.location}}</td>
 									</tr>
 									<tr>
-										<td><strong>Host Count:</strong></td>
-										<td>{{config_review_list.host_count}}</td>
-									</tr>
-									<tr>
 										<td><strong>Comments:</strong></td>
 										<td>{{config_review_list.comments|linebreaks}}</td>
 									</tr>
@@ -151,7 +155,7 @@
 									<table class="table table-condensed" style="background-color:#d7e9f0;color:#555555;">
 										<tr>
 											<td><strong>Assigned by: </strong></td>
-											<td>{{config_review_list.task.assigned_by.user.first_name}} {{config_review_list.task.assigned_by.user.last_name}}</td>
+											<td>{{config_review_list.task.assigned_by.user.first_name}} {{config_review_list.task.assigned_by.user.last_name}} ({{ config_review_list.task.assigned_by.department.organization.name}})</td>
 										</tr>
 										<tr>
 											<td><strong>Assigned on: </strong></td>
@@ -168,7 +172,7 @@
 										{% else %}
 											<tr>
 												<td><strong>Assigned to:</strong></td>
-												<td>{{config_review_list.task.assigned_to.user.first_name}} {{config_review_list.task.assigned_to.user.last_name}}</td>
+												<td>{{config_review_list.task.assigned_to.user.first_name}} {{config_review_list.task.assigned_to.user.last_name}}     {% if config_review_list.task.assigned_to %} ({{config_review_list.task.assigned_to.department.organization.name}}) {% endif %} </td>
 											</tr>
 											<tr>
 												<td><strong>Status:</strong></td>
@@ -185,36 +189,5 @@
 			</div>
 		</div>
 	</div>
-{% if is_paginated %}
-     <div class="pt-2 pb-2">
-         <div class="pagination justify-content-center">
-             {% if page_obj.has_previous %}
-             <li class="page-item" style="width: 90px">
-                 <a class="page-link d-flex justify-content-center" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">
-             {% else %}
-             <li class="page-item disabled" style="width:90px">
-                 <a class="page-link d-flex justify-content-center" href="#">
-             {% endif %}
-                     Previous
-                 </a>
-             </li>
-             <li class="page-item pl-3 pr-3">
-                 <div class="mt-1 mb-1">
-                     Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                 </div>
-             </li>
-             {% if page_obj.has_next %}
-             <li class="page-item" style="width: 90px">
-                 <a class="page-link d-flex justify-content-center" href="{{ request.path }}?page={{ page_obj.next_page_number }}">
-             {% else %}
-             <li class="page-item disabled" style="width: 90px">
-                 <a class="page-link d-flex justify-content-center" href="#">
-             {% endif %}
-                     Next
-                 </a>
-             </li>
-         </div>
-     </div>
-     {% endif %}
 	<!-- Content Row -->
 {% endblock %}

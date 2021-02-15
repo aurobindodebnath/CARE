@@ -112,19 +112,31 @@
 									<span style="background-color: white;color:blue;padding:3px;border-radius:4px;">
 										{{vapt_assessment_list.task.code}}
 									</span>
-									&nbsp;&nbsp;&nbsp; 
-									IP Address: <span><b>{{vapt_assessment_list.ip_address}}</b></span>
+									<!--&nbsp;&nbsp;&nbsp; IP Address:-->
+									<span><b>&nbsp;{{vapt_assessment_list.name}}</b></span>
 								</h3>
 							</div>
 							<div class="container-fluid" style="border-bottom:1px solid grey">
 								<table class="table table-condensed">
 									<tr>
-										<td><strong>Device Type:</strong></td>
-										<td>{{vapt_assessment_list.device_type}}</td>
+										<td><strong>IP Address(s):</strong></td>
+										<td>{{vapt_assessment_list.ip_address}}</td>
+									</tr>
+									<tr>
+										<td><strong>Host Count:</strong></td>
+										<td>{{vapt_assessment_list.item_count}}</td>
 									</tr>
 									<tr>
 										<td><strong>Accessibility:</strong></td>
 										<td>{{vapt_assessment_list.get_accessibility_display}}</td>
+									</tr>
+									<tr>
+										<td><strong>Testing Environment:</strong></td>
+										<td>{{vapt_assessment_list.get_environment_display}}</td>
+									</tr>
+									<tr>
+										<td><strong>Device Type:</strong></td>
+										<td>{{vapt_assessment_list.device_type}}</td>
 									</tr>
 									<tr>
 										<td><strong>Device/Asset Owner:</strong></td>
@@ -133,10 +145,6 @@
 									<tr>
 										<td><strong>Division SPOC:</strong></td>
 										<td>{{vapt_assessment_list.spoc|linebreaks}}</td>
-									</tr>
-									<tr>
-										<td><strong>Testing Environment:</strong></td>
-										<td>{{vapt_assessment_list.get_environment_display}}</td>
 									</tr>
 									<tr>
 										<td><strong>Location:</strong></td>
@@ -154,7 +162,7 @@
 									<table class="table table-condensed" style="background-color:#d7e9f0;color:#555555;">
 										<tr>
 											<td><strong>Assigned by: </strong></td>
-											<td>{{vapt_assessment_list.task.assigned_by.user.first_name}} {{vapt_assessment_list.task.assigned_by.user.last_name}}</td>
+											<td>{{vapt_assessment_list.task.assigned_by.user.first_name}} {{vapt_assessment_list.task.assigned_by.user.last_name}} ({{ vapt_assessment_list.task.assigned_by.department.organization.name}})</td>
 										</tr>
 										<tr>
 											<td><strong>Assigned on: </strong></td>
@@ -171,7 +179,7 @@
 										{% else %}
 											<tr>
 												<td><strong>Assigned to:</strong></td>
-												<td>{{vapt_assessment_list.task.assigned_to.user.username}} {{vapt_assessment_list.task.assigned_to.user.last_name}}</td>
+												<td>{{vapt_assessment_list.task.assigned_to.user.first_name}} {{vapt_assessment_list.task.assigned_to.user.last_name}}     {% if vapt_assessment_list.task.assigned_to %} ({{vapt_assessment_list.task.assigned_to.department.organization.name}}) {% endif %} </td>
 											</tr>
 											<tr>
 												<td><strong>Status:</strong></td>

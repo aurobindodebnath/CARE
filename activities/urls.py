@@ -2,15 +2,24 @@ from django.urls import path, include
 from activities import views
 
 urlpatterns = [
-	path('', views.index, name='index'),
+	path('', views.home, name='home'),
 	path('login/', views.custom_login, name='login'),
 	path('lockout/',views.lockout, name='lockout'),
+	
+	path('backup/', views.backup, name='backup'),
+	path('restore/', views.restore, name='restore'),
+
+	#Dashboards
+	path('dashboard/', views.dashboard, name='dashboard'),
+	path('dashboard/depart/', views.department, name='department'),
 
 	#List Views
 	path('application_security/', views.ApplicationSecurityListView.as_view(), name='application_security'),
 	path('vapt_assessment/', views.VaptAssessmentListView.as_view(), name='vapt_assessment'),
 	path('config_review/', views.ConfigurationReviewListView.as_view(), name='config_review'),
 	path('bulk_activity/', views.BulkActivityListView.as_view(), name='bulk_activity'),
+
+	path('sanitized_activity/', views.createActivity, name='sanitized_activity_upload'),
 
 	#Application Security Categories
 	#TODO: Convert URLs to Application security parameters

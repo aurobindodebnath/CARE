@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Welcome</title>
+  <title>KPMG-IOCL</title>
 
   <!-- Custom fonts for this template-->
   <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -18,10 +18,13 @@
   <!-- Custom styles for this template-->
   <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
 
-  <style>
+  <style type="text/css" rel="stylesheet">
   		.dropdown:hover .dropdown-menu{
 			display: block;
 			margin: 0px 0px 0px 20px;
+		}
+		a.nounderline{
+			text-decoration: none;
 		}
   </style>
 
@@ -36,7 +39,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href=" {% url 'index' %} ">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href=" {% url 'home' %} ">
 <!--        <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div> -->
@@ -48,10 +51,17 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-          <a class="nav-link" href=" {% url 'index' %}">
+          <a class="nav-link" href=" {% url 'home' %}">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Home</span></a>
+      </li>
+	  {% if perms.activities.change_task %}
+      <li class="nav-item active">
+          <a class="nav-link" href=" {% url 'dashboard' %}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
+	  {% endif %}
 
       <hr class="sidebar-divider my-0">
 
@@ -65,11 +75,12 @@
 
         <div class="dropdown-menu mr-1">
           <div class="bg-white ml-3 collapse-inner rounded">
-            <p><a class="collapse-item" href="{% url 'webappexternal' %}">Web Application (External)</a></p>
-            <p><a class="collapse-item" href="{% url 'webappinternal' %}">Web Application (Internal)</a></p>
-            <p><a class="collapse-item" href="{% url 'webservexternal' %}">Web Service (External)</a></p>
-            <p><a class="collapse-item" href="{% url 'webservinternal' %}">Web Service (Internal)</a></p>
-            <p><a class="collapse-item" href="{% url 'mobapp' %}">Mobile Application</a></p>
+            <p><a class="collapse-item" href="{% url 'application_security' %}?category=webapp&access=external">Web Application (External)</a></p>
+            <p><a class="collapse-item" href="{% url 'application_security' %}?category=webapp&access=internal">Web Application (Internal)</a></p>
+            <p><a class="collapse-item" href="{% url 'application_security' %}?category=webservice&access=external">Web Service (External)</a></p>
+            <p><a class="collapse-item" href="{% url 'application_security' %}?category=webservice&access=internal">Web Service (Internal)</a></p>
+            <p><a class="collapse-item" href="{% url 'application_security' %}?category=mobileapp">Mobile Application</a></p>
+            <p><a class="collapse-item" href="{% url 'application_security' %}?critical=y">Critical Application</a></p>
           </div>
         </div>
 		</div>
@@ -84,7 +95,10 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Configuration Audit</span></a>
       </li>
-      <li class="nav-item active">
+
+      <hr class="sidebar-divider">
+      
+	  <li class="nav-item active">
         <a class="nav-link" href="{% url 'bulk_activity' %}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Bulk Data</span></a>
@@ -94,7 +108,7 @@
       <hr class="sidebar-divider">
 
       <!-- Nav Item - Pages Collapse Menu -->
-	  {% if perms.activities.add_applicationsecurity %}
+	  {% if perms.activities.add_task %}
       <li class="nav-item">
         <div id="collapsePages" style="margin: 5px;">
           <div class="bg-white py-2 collapse-inner rounded">
@@ -168,7 +182,7 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-          {% block body %}
+        	{% block body %}
         	{% endblock %}
         </div>
       <!-- End of Main Content -->
@@ -217,6 +231,38 @@
 
   <!-- Custom scripts for all pages-->
   <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+  <script>
+  		const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        var depart = urlParams.get('depart'); 
+		const status = urlParams.get('status');
+
+		if (status){
+            document.getElementById(status).className += "-none";
+        }
+        else if (document.getElementById('total')) {
+            document.getElementById('total').className = "card border-left-primary shadow-none h-100 py-2";
+        }
+
+        if(depart) {
+			var card = document.getElementById('card_'+depart);
+			if (card) {
+				card.className = "card border-left-primary bg-gradient-primary shadow h-100 py-2";
+            	document.getElementById('text_'+depart).className = "h5 font-weight-bold text-light text-align-center text-uppercase";
+			}
+			depart = encodeURIComponent(depart);
+			var no_filter = document.getElementsByClassName('no_filter');
+			for(var i = 0; i < no_filter.length; i++){
+				no_filter[i].href = no_filter[i].href + "?depart=" + depart;
+			}
+
+			var filter = document.getElementsByClassName('filter')
+			for(var i = 0; i < filter.length; i++){
+				filter[i].href = filter[i].href + "&depart=" + depart;
+			}
+        }
+
+  </script>
 
 </body>
 

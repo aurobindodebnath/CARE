@@ -45,3 +45,15 @@ class VulnerabilityAdmin(admin.ModelAdmin):
 @admin.register(BulkActivity)
 class BulkActivityAdmin(admin.ModelAdmin):
 	pass
+
+@admin.register(SanitizedUpload)
+class SanitizedUploadAdmin(admin.ModelAdmin):
+	pass
+
+@admin.register(BackupTracker)
+class BackupTrackerAdmin(admin.ModelAdmin):
+	pass
+
+@admin.register(RestoreTracker)
+class RestoreTrackerAdmin(admin.ModelAdmin):
+	pass

@@ -17,7 +17,8 @@
 		
 		<!-- Earnings (Monthly) Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-primary shadow h-100 py-2">
+			<a href="{% url 'application_security' %}" class="nounderline no_filter">
+			<div id='total' class="card border-left-primary shadow h-100 py-2">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -30,11 +31,13 @@
 					</div>
 				</div>
 			</div>
+			</a>
 		</div>
 
 		<!-- Earnings (Monthly) Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-success shadow h-100 py-2">
+			<a href="{% url 'application_security' %}?status=completed" class="nounderline filter">
+			<div id='completed' class="card border-left-success h-100 py-2 shadow">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -47,11 +50,13 @@
 					</div>
 				</div>
 			</div>
+			</a>
 		</div>
 
 		<!-- Earnings (Monthly) Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-info shadow h-100 py-2">
+			<a class="nounderline filter" href="{% url 'application_security' %}?status=in_progress">
+			<div id='in_progress' class="card border-left-info h-100 py-2 shadow">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -64,27 +69,31 @@
 					</div>
 				</div>
 			</div>
+			</a>
 		</div>
 
 		<!-- Pending Requests Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-warning shadow h-100 py-2">
+			<a class="nounderline filter" href="{% url 'application_security' %}?status=not_assigned">
+			<div id='not_assigned' class="card border-left-warning h-100 py-2 shadow">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">To be Assigned</div>
-								<div class="h5 mb-0 font-weight-bold text-gray-800">{{ not_assigned}}</div>
-							</div>
-							<div class="col-auto">
-								<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-							</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800">{{ not_assigned}}</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
 						</div>
 					</div>
 				</div>
 			</div>
+			</a>
+		</div>
 
 			<div class="col-xl-2 col-md-6 mb-3">
-				<div class="card border-left-danger shadow h-100 py-2">
+			<a class="nounderline filter" href="{% url 'application_security' %}?status=rejected">
+				<div id='rejected' class="card border-left-danger h-100 py-2 shadow">
 					<div class="card-body">
 						<div class="row no-gutters align-items-center">
 							<div class="col mr-2">
@@ -98,6 +107,7 @@
 					</div>
 				</div>
 			</div>
+			</a>
 		</div>
 		<hr>
 		
@@ -116,7 +126,9 @@
 				<tbody>
 					{% for activity in application_security_list %}
 						<tr class="d-flex">
-							<td class="col-2"><a href="{% url 'application_security_detail' activity.pk %}">{{ activity.name }}</a></td>
+							<td class="col-2" style="word-wrap:break-word;">
+								<a href="{% url 'application_security_detail' activity.pk %}">{{ activity.name }}</a>
+							</td>
 							<td class="col-2" style="word-wrap:break-word;">{{ activity.url }}</td>
 							<td class="col-2">{{ activity.task.assigned_by.department.name }}</td>
 							<td class="col-2">{{ activity.task.assigned_by.department.location }}</td>

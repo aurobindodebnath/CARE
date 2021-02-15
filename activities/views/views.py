@@ -9,6 +9,14 @@ from activities.forms import *
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import Sum
+from .custom import *
+
+def sum(result):
+	total = result.aggregate(Sum('item_count'))['item_count__sum']
+	if not total:
+		return 0
+	return total
 
 def custom_login(request):
 	if request.method == 'GET':
@@ -20,7 +28,7 @@ def custom_login(request):
 		user = authenticate(request, username=username, password=password)
 		if user is not None:
 			login(request, user)
-			return HttpResponseRedirect(reverse('index'))
+			return HttpResponseRedirect(reverse('home'))
 		else:
 			context = {
 				'login_message': 'Incorrect username or password.',
@@ -36,42 +44,42 @@ def lockout(request):
 	return render(request, 'login.html', context=context)
 
 @login_required
-def index(request):
+def home(request):
 
 	if request.user.groups.filter(name="Vendor").exists():
-		total_object = Task.objects.all()
+#		total_object = Task.objects.all()
 		app = ApplicationSecurity.objects.all()
 		vapt = VaptAssessment.objects.all()
 		config = ConfigurationReview.objects.all()
 	else:
-		total_object = Task.objects.filter(assigned_by__user=request.user)
+#		total_object = Task.objects.filter(assigned_by__user=request.user)
 		app = ApplicationSecurity.objects.filter(task__assigned_by__user=request.user)
 		vapt = VaptAssessment.objects.filter(task__assigned_by__user=request.user)
 		config = ConfigurationReview.objects.filter(task__assigned_by__user=request.user)
 
-	total = total_object.count()
-	not_assigned = total_object.filter(status__exact='not_assigned').count()
-	in_progress = total_object.filter(status__exact='in_progress').count()
-	rejected = total_object.filter(status__exact='rejected').count()
-	completed = total_object.filter(status__exact='completed').count()
-		
-	app_total = app.count()
-	app_not_assigned = app.filter(task__status__exact='not_assigned').count()
-	app_in_progress = app.filter(task__status__exact='in_progress').count()
-	app_rejected = app.filter(task__status__exact='rejected').count()
-	app_completed = app.filter(task__status__exact='completed').count()
+	app_not_assigned = sum(app.filter(task__status__exact='not_assigned'))
+	app_in_progress = sum(app.filter(task__status__exact='in_progress'))
+	app_rejected = sum(app.filter(task__status__exact='rejected'))
+	app_completed = sum(app.filter(task__status__exact='completed'))
+	app_total = app_not_assigned + app_in_progress + app_rejected + app_completed
 
-	vapt_total = vapt.count()
-	vapt_not_assigned = vapt.filter(task__status__exact='not_assigned').count()
-	vapt_in_progress = vapt.filter(task__status__exact='in_progress').count()
-	vapt_rejected = vapt.filter(task__status__exact='rejected').count()
-	vapt_completed = vapt.filter(task__status__exact='completed').count()
+	vapt_not_assigned = sum(vapt.filter(task__status__exact='not_assigned'))
+	vapt_in_progress = sum(vapt.filter(task__status__exact='in_progress'))
+	vapt_rejected = sum(vapt.filter(task__status__exact='rejected'))
+	vapt_completed = sum(vapt.filter(task__status__exact='completed'))
+	vapt_total = vapt_not_assigned + vapt_in_progress + vapt_rejected + vapt_completed
 
-	config_total = config.count()
-	config_not_assigned = config.filter(task__status__exact='not_assigned').count()
-	config_in_progress = config.filter(task__status__exact='in_progress').count()
-	config_rejected = config.filter(task__status__exact='rejected').count()
-	config_completed = config.filter(task__status__exact='completed').count()
+	config_not_assigned = sum(config.filter(task__status__exact='not_assigned'))
+	config_in_progress = sum(config.filter(task__status__exact='in_progress'))
+	config_rejected = sum(config.filter(task__status__exact='rejected'))
+	config_completed = sum(config.filter(task__status__exact='completed'))
+	config_total = config_not_assigned + config_in_progress + config_rejected + config_completed
+
+	total = app_total + vapt_total + config_total
+	not_assigned = app_not_assigned + vapt_not_assigned + config_not_assigned
+	in_progress = app_in_progress + vapt_in_progress + config_in_progress 
+	rejected = app_rejected + vapt_rejected + config_rejected
+	completed = app_completed + vapt_completed + config_completed
 		
 	context = {
 		'total' : total,
@@ -105,8 +113,7 @@ def index(request):
 		},
 	}
 
-	return render(request, 'index.html', context=context)
-
+	return render(request, 'home.html', context=context)
 
 #class appllcationsecurity(LoginRequiredMixin, View):
 class ApplicationSecurityListView(LoginRequiredMixin, generic.ListView):
@@ -115,26 +122,69 @@ class ApplicationSecurityListView(LoginRequiredMixin, generic.ListView):
 	template_name = 'activities/applicationSecurity.html'
 	paginate_by = 15
 
-	def get_queryset(self):
+	def query_without_filter(self):
 		app = ApplicationSecurity.objects.all().order_by('-task__date_posted')
+
 		if self.request.user.groups.filter(name="Client").exists():
-			return app.filter(task__assigned_by__user=self.request.user)
+			app = app.filter(task__assigned_by__user=self.request.user)
+		
+		category = self.request.GET.get('category')
+		access = self.request.GET.get('access')
+		depart = self.request.GET.get('depart')
+		critical = self.request.GET.get('critical')
+
+		if depart:
+			app = app.filter(task__assigned_by__department__name__iexact=depart)
+		if critical:
+			app = app.filter(critical=critical)
+		if category:
+			app = app.filter(category=category)
+		if access:
+			app = app.filter(accessibility=access)
+
+		return app
+
+	def get_queryset(self):
+		app = self.query_without_filter()
+
+		status = self.request.GET.get('status')
+		if status:
+			app = app.filter(task__status=status)
+
 		return app
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		app = ApplicationSecurity.objects.all()
-		
-		if self.request.user.groups.filter(name="Client").exists():
-			app = app.filter(task__assigned_by__user=self.request.user)
+		app = self.query_without_filter()
 			
-		context['total'] = app.count()
-		context['not_assigned'] = app.filter(task__status__exact="not_assigned").count()
-		context['in_progress'] = app.filter(task__status__exact="in_progress").count()
-		context['rejected'] = app.filter(task__status__exact="rejected").count()
-		context['completed'] = app.filter(task__status__exact="completed").count()
+		context['not_assigned'] = sum(app.filter(task__status__exact="not_assigned"))
+		context['in_progress'] = sum(app.filter(task__status__exact="in_progress"))
+		context['rejected'] = sum(app.filter(task__status__exact="rejected"))
+		context['completed'] = sum(app.filter(task__status__exact="completed"))
+		context['total'] = sum(app)
 		
-		context['title'] = "Penetration Testing"
+		title = "Penetration Testing"
+		category = self.request.GET.get('category')
+		access = self.request.GET.get('access')
+		depart = self.request.GET.get('depart')
+		critical = self.request.GET.get('critical')
+
+		if category == 'webapp':
+			title = title + " - Web Application"
+		elif category == 'webservice':
+			title = title + " - Web Service"
+		elif category == 'mobileapp':
+			title = title + " - Mobile Application"
+
+		if access == 'internal':
+			title = title + " (Internal)"
+		elif access == 'external':
+			title = title + " (External)"
+			
+		if critical == 'y':
+			title = title + " (Critical Applications)"
+
+		context['title'] = title
 		return context
 
 class WebAppIntListView(LoginRequiredMixin, generic.ListView):
@@ -283,24 +333,41 @@ class VaptAssessmentListView(LoginRequiredMixin, generic.ListView):
 	template_name = 'activities/vaptAssessment.html'
 	paginate_by = 15
 
-	def get_queryset(self):
+	def query_without_filter(self):
 		vapt = VaptAssessment.objects.all().order_by('-task__date_posted')
+
 		if self.request.user.groups.filter(name="Client").exists():
-			return vapt.filter(task__assigned_by__user=self.request.user)
+			vapt = vapt.filter(task__assigned_by__user=self.request.user)
+		
+		depart = self.request.GET.get('depart')
+
+		if depart:
+			vapt = vapt.filter(task__assigned_by__department__name__iexact=depart)
+
+		return vapt
+
+	def get_queryset(self):
+		vapt = self.query_without_filter()
+
+		status = self.request.GET.get('status')
+		
+		if status:
+			vapt = vapt.filter(task__status=status)
+
 		return vapt
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		vapt = VaptAssessment.objects.all()
+		vapt = self.query_without_filter()
 		
 		if self.request.user.groups.filter(name="Client").exists():
 			vapt = vapt.filter(task__assigned_by__user=self.request.user)
 			
-		context['total'] = vapt.count()
-		context['not_assigned'] = vapt.filter(task__status__exact="not_assigned").count()
-		context['in_progress'] = vapt.filter(task__status__exact="in_progress").count()
-		context['rejected'] = vapt.filter(task__status__exact="rejected").count()
-		context['completed'] = vapt.filter(task__status__exact="completed").count()
+		context['total'] = sum(vapt)
+		context['not_assigned'] = sum(vapt.filter(task__status__exact="not_assigned"))
+		context['in_progress'] = sum(vapt.filter(task__status__exact="in_progress"))
+		context['rejected'] = sum(vapt.filter(task__status__exact="rejected"))
+		context['completed'] = sum(vapt.filter(task__status__exact="completed"))
 		
 		return context
 
@@ -310,24 +377,41 @@ class ConfigurationReviewListView(LoginRequiredMixin, generic.ListView):
 	template_name = 'activities/configReview.html'
 	paginate_by = 15
 
-	def get_queryset(self):
+	def query_without_filter(self):
 		config = ConfigurationReview.objects.all().order_by('-task__date_posted')
+
 		if self.request.user.groups.filter(name="Client").exists():
-			return config.filter(task__assigned_by__user=self.request.user)
+			config = config.filter(task__assigned_by__user=self.request.user)
+		
+		depart = self.request.GET.get('depart')
+
+		if depart:
+			config = config.filter(task__assigned_by__department__name__iexact=depart)
+
+		return config
+
+	def get_queryset(self):
+		config = self.query_without_filter()
+
+		status = self.request.GET.get('status')
+		
+		if status:
+			config = config.filter(task__status=status)
+		
 		return config
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		config = ConfigurationReview.objects.all()
+		config = self.query_without_filter()
 		
 		if self.request.user.groups.filter(name="Client").exists():
 			config = config.filter(task__assigned_by__user=self.request.user)
 			
-		context['total'] = config.count()
-		context['not_assigned'] = config.filter(task__status__exact="not_assigned").count()
-		context['in_progress'] = config.filter(task__status__exact="in_progress").count()
-		context['rejected'] = config.filter(task__status__exact="rejected").count()
-		context['completed'] = config.filter(task__status__exact="completed").count()
+		context['total'] = sum(config)
+		context['not_assigned'] = sum(config.filter(task__status__exact="not_assigned"))
+		context['in_progress'] = sum(config.filter(task__status__exact="in_progress"))
+		context['rejected'] = sum(config.filter(task__status__exact="rejected"))
+		context['completed'] = sum(config.filter(task__status__exact="completed"))
 
 		return context
 
@@ -370,16 +454,16 @@ class ApplicationSecurityDetailView(LoginRequiredMixin, generic.DetailView):
 		activity_task = get_object_or_404(ApplicationSecurity, pk=self.kwargs['pk']).task
 		if self.request.user.groups.filter(name="Client").exists():
 			if not activity_task.assigned_by.user == self.request.user:
-				return None 
+				return None	#TODO: Return proper error 
 			app = app.filter(task__assigned_by__user=self.request.user)
 		else:
 			context['form'] = UpdateTask(initial={'status': activity_task.status, 'assigned_to': activity_task.assigned_to.pk if activity_task.assigned_to else None})
 			
-		context['total'] = app.count()
-		context['not_assigned'] = app.filter(task__status__exact="not_assigned").count()
-		context['in_progress'] = app.filter(task__status__exact="in_progress").count()
-		context['rejected'] = app.filter(task__status__exact="rejected").count()
-		context['completed'] = app.filter(task__status__exact="completed").count()
+		context['total'] = sum(app)
+		context['not_assigned'] = sum(app.filter(task__status__exact="not_assigned"))
+		context['in_progress'] = sum(app.filter(task__status__exact="in_progress"))
+		context['rejected'] = sum(app.filter(task__status__exact="rejected"))
+		context['completed'] = sum(app.filter(task__status__exact="completed"))
 
 		return context
 
@@ -400,11 +484,11 @@ class VaptAssessmentDetailView(LoginRequiredMixin, generic.DetailView):
 		else:
 			context['form'] = UpdateTask(initial={'status': activity_task.status, 'assigned_to': activity_task.assigned_to.pk if activity_task.assigned_to else None})
 			
-		context['total'] = vapt.count()
-		context['not_assigned'] = vapt.filter(task__status__exact="not_assigned").count()
-		context['in_progress'] = vapt.filter(task__status__exact="in_progress").count()
-		context['rejected'] = vapt.filter(task__status__exact="rejected").count()
-		context['completed'] = vapt.filter(task__status__exact="completed").count()
+		context['total'] = sum(vapt)
+		context['not_assigned'] = sum(vapt.filter(task__status__exact="not_assigned"))
+		context['in_progress'] = sum(vapt.filter(task__status__exact="in_progress"))
+		context['rejected'] = sum(vapt.filter(task__status__exact="rejected"))
+		context['completed'] = sum(vapt.filter(task__status__exact="completed"))
 
 		return context
 
@@ -425,11 +509,11 @@ class ConfigurationReviewDetailView(LoginRequiredMixin, generic.DetailView):
 		else:
 			context['form'] = UpdateTask(initial={'status': activity_task.status, 'assigned_to': activity_task.assigned_to.pk if activity_task.assigned_to else None})
 			
-		context['total'] = config.count()
-		context['not_assigned'] = config.filter(task__status__exact="not_assigned").count()
-		context['in_progress'] = config.filter(task__status__exact="in_progress").count()
-		context['rejected'] = config.filter(task__status__exact="rejected").count()
-		context['completed'] = config.filter(task__status__exact="completed").count()
+		context['total'] = sum(config)
+		context['not_assigned'] = sum(config.filter(task__status__exact="not_assigned"))
+		context['in_progress'] = sum(config.filter(task__status__exact="in_progress"))
+		context['rejected'] = sum(config.filter(task__status__exact="rejected"))
+		context['completed'] = sum(config.filter(task__status__exact="completed"))
 
 		return context
 
@@ -469,22 +553,23 @@ def requestApplicationSecurity(request):
 			task = Task(
 				assigned_by = get_object_or_404(UserProfile, pk=request.user.user_profile.pk)
 			)
-			print(form.cleaned_data['category'])
 
+			print(form.cleaned_data['testing_type'])
 			new_application = ApplicationSecurity(
 				task=task,
 				name=form.cleaned_data['name'],
-				category=form.cleaned_data['category'],
-				owner=form.cleaned_data['owner'],
-				spoc=form.cleaned_data['spoc'],
 				url=form.cleaned_data['url'],
-				testing_type = form.cleaned_data['testing_type'],
+				category=form.cleaned_data['category'],
 				accessibility = form.cleaned_data['accessibility'],
-				development = form.cleaned_data['development'],
+				testing_type = form.cleaned_data['testing_type'],
 				environment = form.cleaned_data['environment'],
+				development = form.cleaned_data['development'],
+				critical = form.cleaned_data['critical'],
 				functionality=form.cleaned_data['functionality'],
 				role_count=form.cleaned_data['role_count'],
 				loc=form.cleaned_data['loc'],
+				owner=form.cleaned_data['owner'],
+				spoc=form.cleaned_data['spoc'],
 				comments=form.cleaned_data['comments'],
 			)
 			task.save()
@@ -521,12 +606,14 @@ def requestVaptAssessment(request):
 			)
 			new_application = VaptAssessment(
 				task=task,
+				name=form.cleaned_data['name'],
 				ip_address=form.cleaned_data['ip_address'],
+				item_count=form.cleaned_data['item_count'],
 				accessibility=form.cleaned_data['accessibility'],
+				environment = form.cleaned_data['environment'],
+				device_type=form.cleaned_data['device_type'],
 				owner=form.cleaned_data['owner'],
 				spoc=form.cleaned_data['spoc'],
-				device_type=form.cleaned_data['device_type'],
-				environment = form.cleaned_data['environment'],
 				location = form.cleaned_data['location'],
 				comments=form.cleaned_data['comments'],
 			)
@@ -565,11 +652,12 @@ def requestConfigReview(request):
 			task.save()
 			new_application = ConfigurationReview(
 				task=task,
+				name=form.cleaned_data['name'],
+				host_name=form.cleaned_data['host_name'],
+				item_count=form.cleaned_data['item_count'],
 				device_type=form.cleaned_data['device_type'],
-				ip_address = form.cleaned_data['ip_address'],
 				owner = form.cleaned_data['owner'],
 				spoc = form.cleaned_data['spoc'],
-				host_count=form.cleaned_data['host_count'],
 				location = form.cleaned_data['location'],
 				comments=form.cleaned_data['comments'],
 			)
@@ -603,6 +691,7 @@ def activityUpload(request):
 		form = ActivityUploadForm(request.POST, request.FILES)
 
 		files = request.FILES['files']
+		print(type(files))
 		file_type = magic.from_buffer(files.read())
 		file_name = str(files)
 		file_extension = file_name.split('.')
@@ -688,7 +777,7 @@ def updateTaskVapt(request, pk):
 
 		if form.is_valid():
 			task.status = form.cleaned_data['status']
-			task.assigned_to = get_object_or_404(User, pk=form.cleaned_data['assigned_to'])
+			task.assigned_to = get_object_or_404(UserProfile, pk=form.cleaned_data['assigned_to'])
 			task.save()
 
 		return HttpResponseRedirect(reverse('vapt_assessment_detail', kwargs={'pk':pk }))
@@ -709,7 +798,7 @@ def updateTaskConfig(request, pk):
 
 		if form.is_valid():
 			task.status = form.cleaned_data['status']
-			task.assigned_to = get_object_or_404(User, pk=form.cleaned_data['assigned_to'])
+			task.assigned_to = get_object_or_404(UserProfile, pk=form.cleaned_data['assigned_to'])
 			task.save()
 
 		return HttpResponseRedirect(reverse('config_review_detail', kwargs={'pk':pk }))
@@ -722,4 +811,3 @@ def updateTaskConfig(request, pk):
 #	}
 #
 #	return render(request, 'activites/applicationSecurityDetail.html', context)
-

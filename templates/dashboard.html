@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+          </div>
+          
+          <hr>
+
+          <!-- Content Row -->
+          <div class="row">
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=cois" class="nounderline">
+              <div id='card_cois' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_cois' class="h5 font-weight-bold text-primary text-align-center text-uppercase">COIS</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=mkho" class="nounderline">
+              <div id='card_mkho' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_mkho' class="h5 font-weight-bold text-primary text-align-center text-uppercase">MKHO</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=rhq" class="nounderline">
+              <div id='card_rhq' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_rhq' class="h5 font-weight-bold text-primary text-align-center text-uppercase">RHQ</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=plho" class="nounderline">
+              <div id='card_plho' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_plho' class="h5 font-weight-bold text-primary text-align-center text-uppercase">PLHO</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=r%26d" class="nounderline">
+              <div id='card_rd' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_rd' class="h5 font-weight-bold text-primary text-align-center text-uppercase">R&D</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+            <div class="col-md-2 mb-3">
+			<a href="{% url 'department' %}?depart=bd" class="nounderline">
+              <div id='card_bd' class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                     <div id='text_bd' class="h5 font-weight-bold text-primary text-align-center text-uppercase">BD</div>
+                  </div>
+                </div>
+              </div>
+			</a>
+            </div>
+          
+		  </div>
+
+          <hr>
+<!--		  
+		  <div class="table-responsive">
+       <table class='table table-striped table-bordered text-center' width="100%">
+	   <thead>
+			<tr class="d-flex">
+				<th class="col-3" rowspan="2">Service</th>
+				<th class="col-3" colspan="3">Marketing Division</th>
+				<th class="col-3" colspan="3">Refineries Division</th>
+				<th class="col-3" colspan="3">Pipeline Division</th>
+				<th class="col-3" colspan="3">R&D Division</th>
+				<th class="col-3" colspan="3">Business Development</th>
+				<th class="col-3" colspan="3">COIS</th>
+			</tr>
+			<tr class="d-flex">
+				<th class="col-3"></th>
+				<th class="col-1">Ordered Quantity</th>
+				<th class="col-1">Offered Quantity</th>
+				<th class="col-1">Completed Quantity</th>
+				<th class="col-1">Ordered Quantity</th>
+				<th class="col-1">Offered Quantity</th>
+				<th class="col-1">Completed Quantity</th>
+				<th class="col-1">Ordered Quantity</th>
+				<th class="col-1">Offered Quantity</th>
+				<th class="col-1">Completed Quantity</th>
+				<th class="col-1">Ordered Quantity</th>
+				<th class="col-1">Offered Quantity</th>
+				<th class="col-1">Completed Quantity</th>
+				<th class="col-1">Ordered Quantity</th>
+				<th class="col-1">Offered Quantity</th>
+				<th class="col-1">Completed Quantity</th>
+				<th class="col-1">Ordered Quantity</th>
+				<th class="col-1">Offered Quantity</th>
+				<th class="col-1">Completed Quantity</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="d-flex">
+				<td class="col-3 text-left"><b>Vulnerability Assessment:</b> Devices/Servers</td>
+				<td class="col-1">{{ vapt.mkho.order }}</td>
+				<td class="col-1">{{ vapt.mkho.offer }}</td>
+				<td class="col-1">{{ vapt.mkho.complete }}</td>
+				<td class="col-1">{{ vapt.rhq.order }}</td>
+				<td class="col-1">{{ vapt.rhq.offer }}</td>
+				<td class="col-1">{{ vapt.rhq.complete }}</td>
+				<td class="col-1">{{ vapt.plho.order }}</td>
+				<td class="col-1">{{ vapt.plho.offer }}</td>
+				<td class="col-1">{{ vapt.plho.complete }}</td>
+				<td class="col-1">{{ vapt.rd.order }}</td>
+				<td class="col-1">{{ vapt.rd.offer }}</td>
+				<td class="col-1">{{ vapt.rd.complete }}</td>
+				<td class="col-1">{{ vapt.bd.order }}</td>
+				<td class="col-1">{{ vapt.bd.offer }}</td>
+				<td class="col-1">{{ vapt.bd.complete }}</td>
+				<td class="col-1">{{ vapt.cois.order }}</td>
+				<td class="col-1">{{ vapt.cois.offer }}</td>
+				<td class="col-1">{{ vapt.cois.complete }}</td>
+			</tr>
+			<tr class="d-flex">
+				<td class="col-3 text-left"><b>Configuration Audit:</b> Devices/Servers</td>
+				<td class="col-1">{{ config.mkho.order }}</td>
+				<td class="col-1">{{ config.mkho.offer }}</td>
+				<td class="col-1">{{ config.mkho.complete }}</td>
+				<td class="col-1">{{ config.rhq.order }}</td>
+				<td class="col-1">{{ config.rhq.offer }}</td>
+				<td class="col-1">{{ config.rhq.complete }}</td>
+				<td class="col-1">{{ config.plho.order }}</td>
+				<td class="col-1">{{ config.plho.offer }}</td>
+				<td class="col-1">{{ config.plho.complete }}</td>
+				<td class="col-1">{{ config.rd.order }}</td>
+				<td class="col-1">{{ config.rd.offer }}</td>
+				<td class="col-1">{{ config.rd.complete }}</td>
+				<td class="col-1">{{ config.bd.order }}</td>
+				<td class="col-1">{{ config.bd.offer }}</td>
+				<td class="col-1">{{ config.bd.complete }}</td>
+				<td class="col-1">{{ config.cois.order }}</td>
+				<td class="col-1">{{ config.cois.offer }}</td>
+				<td class="col-1">{{ config.cois.complete }}</td>
+			</tr>
+			<tr class="d-flex">
+				<td class="col-3 text-left"><b>Penetration Testing:</b> Web Applications (Internet)</td>
+				<td class="col-1">{{ pt.webapp.inter.mkho.order }}</td>
+				<td class="col-1">{{ pt.webapp.inter.mkho.offer }}</td>
+				<td class="col-1">{{ pt.webapp.inter.mkho.complete }}</td>
+				<td class="col-1">{{ pt.webapp.inter.rhq.order }}</td>
+				<td class="col-1">{{ pt.webapp.inter.rhq.offer }}</td>
+				<td class="col-1">{{ pt.webapp.inter.rhq.complete }}</td>
+				<td class="col-1">{{ pt.webapp.inter.plho.order }}</td>
+				<td class="col-1">{{ pt.webapp.inter.plho.offer }}</td>
+				<td class="col-1">{{ pt.webapp.inter.plho.complete }}</td>
+				<td class="col-1">{{ pt.webapp.inter.rd.order }}</td>
+				<td class="col-1">{{ pt.webapp.inter.rd.offer }}</td>
+				<td class="col-1">{{ pt.webapp.inter.rd.complete }}</td>
+				<td class="col-1">{{ pt.webapp.inter.bd.order }}</td>
+				<td class="col-1">{{ pt.webapp.inter.bd.offer }}</td>
+				<td class="col-1">{{ pt.webapp.inter.bd.complete }}</td>
+				<td class="col-1">{{ pt.webapp.inter.cois.order }}</td>
+				<td class="col-1">{{ pt.webapp.inter.cois.offer }}</td>
+				<td class="col-1">{{ pt.webapp.inter.cois.complete }}</td>
+			</tr>
+			<tr class="d-flex">
+				<td class="col-3 text-left"><b>Penetration Testing:</b> Web Services (Internet)</td>
+				<td class="col-1">{{ pt.webservice.inter.mkho.order }}</td>
+				<td class="col-1">{{ pt.webservice.inter.mkho.offer }}</td>
+				<td class="col-1">{{ pt.webservice.inter.mkho.complete }}</td>
+				<td class="col-1">{{ pt.webservice.inter.rhq.order }}</td>
+				<td class="col-1">{{ pt.webservice.inter.rhq.offer }}</td>
+				<td class="col-1">{{ pt.webservice.inter.rhq.complete }}</td>
+				<td class="col-1">{{ pt.webservice.inter.plho.order }}</td>
+				<td class="col-1">{{ pt.webservice.inter.plho.offer }}</td>
+				<td class="col-1">{{ pt.webservice.inter.plho.complete }}</td>
+				<td class="col-1">{{ pt.webservice.inter.rd.order }}</td>
+				<td class="col-1">{{ pt.webservice.inter.rd.offer }}</td>
+				<td class="col-1">{{ pt.webservice.inter.rd.complete }}</td>
+				<td class="col-1">{{ pt.webservice.inter.bd.order }}</td>
+				<td class="col-1">{{ pt.webservice.inter.bd.offer }}</td>
+				<td class="col-1">{{ pt.webservice.inter.bd.complete }}</td>
+				<td class="col-1">{{ pt.webservice.inter.cois.order }}</td>
+				<td class="col-1">{{ pt.webservice.inter.cois.offer }}</td>
+				<td class="col-1">{{ pt.webservice.inter.cois.complete }}</td>
+			</tr>
+			<tr class="d-flex">
+				<td class="col-3 text-left"><b>Penetration Testing:</b> Web Applications (Intranet)</td>
+				<td class="col-1">{{ pt.webapp.intra.mkho.order }}</td>
+				<td class="col-1">{{ pt.webapp.intra.mkho.offer }}</td>
+				<td class="col-1">{{ pt.webapp.intra.mkho.complete }}</td>
+				<td class="col-1">{{ pt.webapp.intra.rhq.order }}</td>
+				<td class="col-1">{{ pt.webapp.intra.rhq.offer }}</td>
+				<td class="col-1">{{ pt.webapp.intra.rhq.complete }}</td>
+				<td class="col-1">{{ pt.webapp.intra.plho.order }}</td>
+				<td class="col-1">{{ pt.webapp.intra.plho.offer }}</td>
+				<td class="col-1">{{ pt.webapp.intra.plho.complete }}</td>
+				<td class="col-1">{{ pt.webapp.intra.rd.order }}</td>
+				<td class="col-1">{{ pt.webapp.intra.rd.offer }}</td>
+				<td class="col-1">{{ pt.webapp.intra.rd.complete }}</td>
+				<td class="col-1">{{ pt.webapp.intra.bd.order }}</td>
+				<td class="col-1">{{ pt.webapp.intra.bd.offer }}</td>
+				<td class="col-1">{{ pt.webapp.intra.bd.complete }}</td>
+				<td class="col-1">{{ pt.webapp.intra.cois.order }}</td>
+				<td class="col-1">{{ pt.webapp.intra.cois.offer }}</td>
+				<td class="col-1">{{ pt.webapp.intra.cois.complete }}</td>
+			</tr>
+			<tr class="d-flex">
+				<td class="col-3 text-left"><b>Penetration Testing:</b> Web Services (Intranet)</td>
+				<td class="col-1">{{ pt.webservice.intra.mkho.order }}</td>
+				<td class="col-1">{{ pt.webservice.intra.mkho.offer }}</td>
+				<td class="col-1">{{ pt.webservice.intra.mkho.complete }}</td>
+				<td class="col-1">{{ pt.webservice.intra.rhq.order }}</td>
+				<td class="col-1">{{ pt.webservice.intra.rhq.offer }}</td>
+				<td class="col-1">{{ pt.webservice.intra.rhq.complete }}</td>
+				<td class="col-1">{{ pt.webservice.intra.plho.order }}</td>
+				<td class="col-1">{{ pt.webservice.intra.plho.offer }}</td>
+				<td class="col-1">{{ pt.webservice.intra.plho.complete }}</td>
+				<td class="col-1">{{ pt.webservice.intra.rd.order }}</td>
+				<td class="col-1">{{ pt.webservice.intra.rd.offer }}</td>
+				<td class="col-1">{{ pt.webservice.intra.rd.complete }}</td>
+				<td class="col-1">{{ pt.webservice.intra.bd.order }}</td>
+				<td class="col-1">{{ pt.webservice.intra.bd.offer }}</td>
+				<td class="col-1">{{ pt.webservice.intra.bd.complete }}</td>
+				<td class="col-1">{{ pt.webservice.intra.cois.order }}</td>
+				<td class="col-1">{{ pt.webservice.intra.cois.offer }}</td>
+				<td class="col-1">{{ pt.webservice.intra.cois.complete }}</td>
+			</tr>
+			<tr class="d-flex">
+				<td class="col-3 text-left"><b>Penetration Testing:</b> Mobile Application</td>
+				<td class="col-1">{{ pt.mobile.mkho.order }}</td>
+				<td class="col-1">{{ pt.mobile.mkho.offer }}</td>
+				<td class="col-1">{{ pt.mobile.mkho.complete }}</td>
+				<td class="col-1">{{ pt.mobile.rhq.order }}</td>
+				<td class="col-1">{{ pt.mobile.rhq.offer }}</td>
+				<td class="col-1">{{ pt.mobile.rhq.complete }}</td>
+				<td class="col-1">{{ pt.mobile.plho.order }}</td>
+				<td class="col-1">{{ pt.mobile.plho.offer }}</td>
+				<td class="col-1">{{ pt.mobile.plho.complete }}</td>
+				<td class="col-1">{{ pt.mobile.rd.order }}</td>
+				<td class="col-1">{{ pt.mobile.rd.offer }}</td>
+				<td class="col-1">{{ pt.mobile.rd.complete }}</td>
+				<td class="col-1">{{ pt.mobile.bd.order }}</td>
+				<td class="col-1">{{ pt.mobile.bd.offer }}</td>
+				<td class="col-1">{{ pt.mobile.bd.complete }}</td>
+				<td class="col-1">{{ pt.mobile.cois.order }}</td>
+				<td class="col-1">{{ pt.mobile.cois.offer }}</td>
+				<td class="col-1">{{ pt.mobile.cois.complete }}</td>
+			</tr>
+			<tr class="d-flex">
+				<td class="col-3 text-left"><b>Daily Monitoring:</b> Crtical Web/ Mobile Apps</td>
+				<td class="col-1">{{ daily.mkho.order }}</td>
+				<td class="col-1">{{ daily.mkho.offer }}</td>
+				<td class="col-1">{{ daily.mkho.complete }}</td>
+				<td class="col-1">{{ daily.rhq.order }}</td>
+				<td class="col-1">{{ daily.rhq.offer }}</td>
+				<td class="col-1">{{ daily.rhq.complete }}</td>
+				<td class="col-1">{{ daily.plho.order }}</td>
+				<td class="col-1">{{ daily.plho.offer }}</td>
+				<td class="col-1">{{ daily.plho.complete }}</td>
+				<td class="col-1">{{ daily.rd.order }}</td>
+				<td class="col-1">{{ daily.rd.offer }}</td>
+				<td class="col-1">{{ daily.rd.complete }}</td>
+				<td class="col-1">{{ daily.bd.order }}</td>
+				<td class="col-1">{{ daily.bd.offer }}</td>
+				<td class="col-1">{{ daily.bd.complete }}</td>
+				<td class="col-1">{{ daily.cois.order }}</td>
+				<td class="col-1">{{ daily.cois.offer }}</td>
+				<td class="col-1">{{ daily.cois.complete }}</td>
+			</tr>
+		</tbody>
+		</table>
+		</div> 
+          
+		  -->
+      </div>
+	  <script>
+	  	const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const depart = urlParams.get('depart')
+		if (depart){
+			document.getElementById('card_'+depart).className = "card border-left-primary bg-gradient-primary shadow h-100 py-2";
+			document.getElementById('text_'+depart).className = "h5 font-weight-bold text-light text-align-center text-uppercase";
+		}
+	  </script>
+  {% endblock %}

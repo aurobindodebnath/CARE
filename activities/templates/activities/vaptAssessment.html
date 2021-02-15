@@ -17,7 +17,8 @@
 		
 		<!-- Earnings (Monthly) Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-primary shadow h-100 py-2">
+		<a href="{% url 'vapt_assessment' %}" class="nounderline no_filter">
+			<div id='total' class="card border-left-primary h-100 py-2 shadow">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -30,11 +31,13 @@
 					</div>
 				</div>
 			</div>
+		</a>
 		</div>
 
 		<!-- Earnings (Monthly) Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-success shadow h-100 py-2">
+		<a href="{% url 'vapt_assessment' %}?status=completed" class="nounderline filter">
+			<div id='completed' class="card border-left-success h-100 py-2 shadow">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -47,11 +50,13 @@
 					</div>
 				</div>
 			</div>
+			</a>
 		</div>
 
 		<!-- Earnings (Monthly) Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-info shadow h-100 py-2">
+		<a href="{% url 'vapt_assessment' %}?status=in_progress" class="nounderline filter">
+			<div id='in_progress' class="card border-left-info h-100 py-2 shadow">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -64,11 +69,13 @@
 					</div>
 				</div>
 			</div>
+			</a>
 		</div>
 
 		<!-- Pending Requests Card Example -->
 		<div class="col-xl-2 col-md-6 mb-3">
-			<div class="card border-left-warning shadow h-100 py-2">
+		<a class="nounderline filter" href="{% url 'vapt_assessment' %}?status=not_assigned">
+			<div id='not_assigned' class="card border-left-warning h-100 py-2 shadow">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
@@ -81,10 +88,12 @@
 						</div>
 					</div>
 				</div>
+				</a>
 			</div>
 
 			<div class="col-xl-2 col-md-6 mb-3">
-				<div class="card border-left-danger shadow h-100 py-2">
+		<a class="nounderline filter" href="{% url 'vapt_assessment' %}?status=rejected">
+				<div id='rejected' class="card border-left-danger h-100 py-2 shadow">
 					<div class="card-body">
 						<div class="row no-gutters align-items-center">
 							<div class="col mr-2">
@@ -96,6 +105,7 @@
 							</div>
 						</div>
 					</div>
+					</a>
 				</div>
 			</div>
 		</div>
@@ -105,7 +115,7 @@
 			<table class="table table-striped" width="100%">
 				<thead>
 					<tr class="d-flex">
-						<th class="col-2">IP Address</th>
+						<th class="col-2">IP Range</th>
 						<th class="col-2">Device Type</th>
 						<th class="col-2">Department</th>
 						<th class="col-2">Location</th>
@@ -116,8 +126,10 @@
 				<tbody>
 					{% for activity in vapt_assessment_list %}
 						<tr class="d-flex">
-							<td class="col-2"><a href="{% url 'vapt_assessment_detail' activity.pk %}">{{ activity.ip_address }}</a></td>
-							<td class="col-2">{{ activity.device_type }}</td>
+							<td class="col-2" style="word-wrap:break-word;">
+								<a href="{% url 'vapt_assessment_detail' activity.pk %}">{{ activity.name }} ({{ activity.item_count }})</a>
+							</td>
+							<td class="col-2" style="word-wrap:break-word;">{{ activity.device_type }}</td>
 							<td class="col-2">{{ activity.task.assigned_by.department.name }}</td>
 							<td class="col-2">{{ activity.task.assigned_by.department.location }}</td>
 							<td class="col-2">{{ activity.task.date_posted.date }}</td>
